@@ -1,0 +1,5 @@
+main: com.github.astridalia.Prisma
+name: Prisma
+version: 1.0-dev
+author: Auuki
+api-version: 1.13
