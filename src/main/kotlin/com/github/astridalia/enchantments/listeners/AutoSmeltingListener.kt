@@ -45,7 +45,8 @@ object AutoSmeltingListener : Listener {
             event.block.type = Material.AIR
 
             // Drop the smelted item and capture the returned entity
-            val droppedItem = event.block.world.dropItemNaturally(event.block.location.add(0.5, 0.5, 0.5), ItemStack(smeltedMaterial))
+            val droppedItem =
+                event.block.world.dropItemNaturally(event.block.location.add(0.5, 0.5, 0.5), ItemStack(smeltedMaterial))
 
             // Use an array to hold the task ID, so it can be accessed and modified within the lambda
             val taskId = IntArray(1)

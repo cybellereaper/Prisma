@@ -1,9 +1,7 @@
 package com.github.astridalia
 
 import co.aikar.commands.PaperCommandManager
-import com.github.astridalia.enchantments.listeners.AutoSmeltingListener
-import com.github.astridalia.enchantments.listeners.GridPickaxeListener
-import com.github.astridalia.enchantments.listeners.MagnetListener
+import com.github.astridalia.enchantments.listeners.*
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
@@ -19,9 +17,11 @@ class Prisma : JavaPlugin(), KoinComponent {
     private val gridPickaxe by inject<GridPickaxeListener>()
     private val autoSmelting by inject<AutoSmeltingListener>()
     private val magnetListener by inject<MagnetListener>()
+    private val explosiveArrows by inject<ExplosiveArrowListener>()
 
 
     private val appModule = module {
+        single { ExplosiveArrowListener }
         single { MagnetListener }
         single { AutoSmeltingListener }
         single { GridPickaxeListener }
@@ -36,7 +36,16 @@ class Prisma : JavaPlugin(), KoinComponent {
         }
 
         paperCommandManager.registerCommand(MyCommands)
-        registerEventListeners(Testing, gridPickaxe, autoSmelting, magnetListener)
+        registerEventListeners(
+            Testing,
+            gridPickaxe,
+            autoSmelting,
+            magnetListener,
+            explosiveArrows,
+            EnchantmentSimpleAttacksListener,
+            LightningArrowListener,
+            VampireHitListener
+        )
     }
 
     private fun registerEventListeners(vararg listeners: Listener) {

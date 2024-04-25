@@ -7,7 +7,21 @@ enum class CustomEnchantments(
     onlyOn: List<Material> = mutableListOf(),
     rarity: Rarity = Rarity.COMMON,
     val displayName: String,
-    ) {
+) {
+    LIGHTNING_STRIKE(rarity = Rarity.LEGENDARY, displayName = "Lightning Strike"),
+
+    CLOAKING(
+        displayName = "Cloaking",
+        rarity = Rarity.LEGENDARY
+    ),
+
+    EXPLOSIVE_ARROW(
+        onlyOn = listOf(
+            Material.BOW,
+            Material.CROSSBOW
+        ),
+        displayName = "Explosive Arrow"
+    ),
 
     MAGNET(displayName = "Magnet"),
 
@@ -22,6 +36,13 @@ enum class CustomEnchantments(
         ),
         displayName = "Auto Smelter"
     ),
+
+
+    VAMPIRE(
+        displayName = "Life-steal",
+        rarity = Rarity.LEGENDARY
+    ),
+
     GRID_BREAKER(
         onlyOn = listOf(
             Material.STONE_PICKAXE,

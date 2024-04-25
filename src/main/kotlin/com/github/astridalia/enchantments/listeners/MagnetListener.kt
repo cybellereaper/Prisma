@@ -38,7 +38,8 @@ object MagnetListener : Listener, KoinComponent {
                     }
                     val itemLocation = item.location
                     val playerLocation = player.location.add(0.0, 1.0, 0.0)
-                    val direction = playerLocation.toVector().subtract(itemLocation.toVector()).normalize().multiply(0.1)
+                    val direction =
+                        playerLocation.toVector().subtract(itemLocation.toVector()).normalize().multiply(0.1)
                     item.velocity = direction
                 } else cancel()
             }

@@ -13,11 +13,24 @@ object CustomEnchantment : KoinComponent {
     private val plugin: JavaPlugin by inject()
     private fun namespacedKey(name: String) = NamespacedKey(plugin, name)
 
-    fun ItemStack.setEnchantmentLevel(customEnchantments: CustomEnchantments, level: Int = 1) {
+    fun ItemStack.setEnchantmentLevel(customEnchantments: CustomEnchantments, level: Int) {
         val enchantmentKey = namespacedKey(customEnchantments.name.lowercase())
         val itemMeta = itemMeta ?: return
         itemMeta.persistentDataContainer.set(enchantmentKey, PersistentDataType.INTEGER, level)
         updateItemLore(customEnchantments,itemMeta, level)
+        this.itemMeta = itemMeta
+    }
+
+    fun ItemStack.removeEnchantment(customEnchantments: CustomEnchantments) {
+        val enchantmentKey = namespacedKey(customEnchantments.name.lowercase())
+        val itemMeta = itemMeta ?: return
+        itemMeta.persistentDataContainer.remove(enchantmentKey)
+        val loreList = itemMeta.lore ?: mutableListOf()
+        val existingIndex = loreList.indexOfFirst { it.startsWith(customEnchantments.displayNameWithColor) }
+        if (existingIndex != -1) {
+            loreList.removeAt(existingIndex)
+            itemMeta.lore = loreList
+        }
         this.itemMeta = itemMeta
     }
 
