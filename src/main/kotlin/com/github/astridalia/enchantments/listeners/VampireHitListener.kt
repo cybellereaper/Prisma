@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import java.util.*
-import kotlin.collections.HashSet
 
 object VampireHitListener : Listener {
     private val processingVampireHits = HashSet<UUID>()
@@ -55,7 +54,5 @@ object VampireHitListener : Listener {
         // Play a particle effect at the entity's location
         entity.world.spawnParticle(Particle.HEART, entity.location.add(0.0, 1.0, 0.0), 10)
 
-        // Play a sound effect at the entity's location
-        entity.world.playSound(entity.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 0.5f)
     }
 }

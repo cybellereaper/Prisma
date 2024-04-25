@@ -8,24 +8,37 @@ enum class CustomEnchantments(
     rarity: Rarity = Rarity.COMMON,
     val displayName: String,
 ) {
-    LIGHTNING_STRIKE(rarity = Rarity.LEGENDARY, displayName = "Lightning Strike"),
-
-    CLOAKING(
-        displayName = "Cloaking",
-        rarity = Rarity.LEGENDARY
+    NATURES_ALLY(displayName = "Nature's Ally", rarity = Rarity.LEGENDARY),
+    REAPER(displayName = "Reaper's Scythe", rarity = Rarity.EPIC),
+    HARVEST_MOON(displayName = "Harvest Moon", rarity = Rarity.EPIC),
+    SOULBOUND(rarity = Rarity.EPIC, displayName = "Soulbound"),
+    LIGHTNING_STRIKE(rarity = Rarity.RARE, displayName = "Lightning Strike"),
+    JETPACK(
+        rarity = Rarity.RARE,
+        displayName = "Jetpack"
     ),
-
+    CLOAKING(
+        rarity = Rarity.COMMON,
+        displayName = "Cloaking",
+    ),
     EXPLOSIVE_ARROW(
         onlyOn = listOf(
             Material.BOW,
             Material.CROSSBOW
         ),
-        displayName = "Explosive Arrow"
+        displayName = "Explosive Arrow",
+        rarity = Rarity.RARE
     ),
-
-    MAGNET(displayName = "Magnet"),
-
+    MAGNET(
+        displayName = "Magnet",
+        rarity = Rarity.RARE
+    ),
+    TELEPORT(
+        displayName = "Teleport",
+        rarity = Rarity.RARE
+    ),
     AUTO_SMELT(
+        rarity = Rarity.EPIC,
         onlyOn = listOf(
             Material.STONE_PICKAXE,
             Material.WOODEN_PICKAXE,
@@ -36,13 +49,10 @@ enum class CustomEnchantments(
         ),
         displayName = "Auto Smelter"
     ),
-
-
     VAMPIRE(
         displayName = "Life-steal",
-        rarity = Rarity.LEGENDARY
+        rarity = Rarity.EPIC
     ),
-
     GRID_BREAKER(
         onlyOn = listOf(
             Material.STONE_PICKAXE,
@@ -53,7 +63,7 @@ enum class CustomEnchantments(
             Material.NETHERITE_PICKAXE
         ),
         displayName = "Grid Breaker",
-        rarity = Rarity.LEGENDARY
+        rarity = Rarity.EPIC
     );
 
     val displayNameWithColor: String = rarity.color.toString() + displayName

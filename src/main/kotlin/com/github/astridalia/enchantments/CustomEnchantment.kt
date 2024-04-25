@@ -11,10 +11,10 @@ import org.koin.core.component.inject
 
 object CustomEnchantment : KoinComponent {
     private val plugin: JavaPlugin by inject()
-    private fun namespacedKey(name: String) = NamespacedKey(plugin, name)
+    fun String.namespacedKey() = NamespacedKey(plugin, this)
 
     fun ItemStack.setEnchantmentLevel(customEnchantments: CustomEnchantments, level: Int) {
-        val enchantmentKey = namespacedKey(customEnchantments.name.lowercase())
+        val enchantmentKey = customEnchantments.name.lowercase().namespacedKey()
         val itemMeta = itemMeta ?: return
         itemMeta.persistentDataContainer.set(enchantmentKey, PersistentDataType.INTEGER, level)
         updateItemLore(customEnchantments,itemMeta, level)
@@ -22,7 +22,7 @@ object CustomEnchantment : KoinComponent {
     }
 
     fun ItemStack.removeEnchantment(customEnchantments: CustomEnchantments) {
-        val enchantmentKey = namespacedKey(customEnchantments.name.lowercase())
+        val enchantmentKey = customEnchantments.name.lowercase().namespacedKey()
         val itemMeta = itemMeta ?: return
         itemMeta.persistentDataContainer.remove(enchantmentKey)
         val loreList = itemMeta.lore ?: mutableListOf()
@@ -35,7 +35,7 @@ object CustomEnchantment : KoinComponent {
     }
 
     fun ItemStack.applyEnchantment(customEnchantments: CustomEnchantments, level: Int = 1) {
-        val enchantmentKey = namespacedKey(customEnchantments.name.lowercase())
+        val enchantmentKey = customEnchantments.name.lowercase().namespacedKey()
         val itemMeta = itemMeta ?: return
         if (!customEnchantments.applicableMaterials.any { it == this.type }) return
         val currentLevel = itemMeta.persistentDataContainer.getOrDefault(enchantmentKey, PersistentDataType.INTEGER, 0) + level
@@ -81,7 +81,7 @@ object CustomEnchantment : KoinComponent {
 
     fun ItemStack.getEnchantOf(enchantments: CustomEnchantments): Int {
         val itemMeta = itemMeta ?: return 0
-        val namespacedKey = namespacedKey(enchantments.name.lowercase())
+        val namespacedKey = enchantments.name.lowercase().namespacedKey()
         return itemMeta.persistentDataContainer.getOrDefault(namespacedKey, PersistentDataType.INTEGER, 0)
     }
 }

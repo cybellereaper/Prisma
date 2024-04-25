@@ -2,11 +2,7 @@ package com.github.astridalia.enchantments.listeners
 
 import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
 import com.github.astridalia.enchantments.CustomEnchantments
-import org.bukkit.Particle
-import org.bukkit.Sound
-import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LightningStrike
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -16,9 +12,6 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object EnchantmentSimpleAttacksListener : Listener {
-
-
-
     @EventHandler
     fun onDamage(event: EntityDamageByEntityEvent) {
         val damage = event.damager as? Player ?: return
