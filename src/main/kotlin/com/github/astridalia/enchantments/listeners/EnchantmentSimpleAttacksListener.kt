@@ -6,6 +6,7 @@ import org.bukkit.entity.LightningStrike
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.potion.PotionEffect
@@ -29,8 +30,10 @@ object EnchantmentSimpleAttacksListener : Listener {
         val itemOnCursor = event.player.itemOnCursor
         val cloakingLevel = itemOnCursor.getEnchantOf(CustomEnchantments.CLOAKING)
         if (cloakingLevel <= 0) return
-        val potionEffect = PotionEffect(PotionEffectType.INVISIBILITY, 10 * 5, 1)
-        event.player.addPotionEffect(potionEffect)
-        event.isCancelled = true
+        if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.LEFT_CLICK_AIR) {
+            val potionEffect = PotionEffect(PotionEffectType.INVISIBILITY, 255 * cloakingLevel, 1)
+            event.player.addPotionEffect(potionEffect)
+        }
+
     }
 }

@@ -7,12 +7,14 @@ import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 import kotlin.math.max
 
+// TODO: Unstable
 object CharacterProfile {
 
     private fun Player.resetToDefaults() {
         val baseHealth = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.defaultValue ?: 20.0
         val baseAttack = this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.defaultValue ?: 1.0
 
+        playerTime
         this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = baseHealth
         this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue = baseAttack
     }

@@ -17,7 +17,7 @@ object CustomEnchantment : KoinComponent {
         val enchantmentKey = customEnchantments.name.lowercase().namespacedKey()
         val itemMeta = itemMeta ?: return
         itemMeta.persistentDataContainer.set(enchantmentKey, PersistentDataType.INTEGER, level)
-        updateItemLore(customEnchantments,itemMeta, level)
+        updateItemLore(customEnchantments, itemMeta, level)
         this.itemMeta = itemMeta
     }
 
@@ -38,8 +38,9 @@ object CustomEnchantment : KoinComponent {
         val enchantmentKey = customEnchantments.name.lowercase().namespacedKey()
         val itemMeta = itemMeta ?: return
         if (!customEnchantments.applicableMaterials.any { it == this.type }) return
-        val currentLevel = itemMeta.persistentDataContainer.getOrDefault(enchantmentKey, PersistentDataType.INTEGER, 0) + level
-        itemMeta.persistentDataContainer.set(enchantmentKey, PersistentDataType.INTEGER, currentLevel)
+        val pdc =itemMeta.persistentDataContainer
+        val currentLevel = pdc.getOrDefault(enchantmentKey, PersistentDataType.INTEGER, 0) + level
+        pdc.set(enchantmentKey, PersistentDataType.INTEGER, currentLevel)
         updateItemLore(customEnchantments, itemMeta, currentLevel)
         this.itemMeta = itemMeta
     }

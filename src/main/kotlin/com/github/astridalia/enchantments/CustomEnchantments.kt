@@ -8,15 +8,16 @@ enum class CustomEnchantments(
     rarity: Rarity = Rarity.COMMON,
     val displayName: String,
 ) {
-    NATURES_ALLY(displayName = "Nature's Ally", rarity = Rarity.LEGENDARY),
-    REAPER(displayName = "Reaper's Scythe", rarity = Rarity.EPIC),
-    HARVEST_MOON(displayName = "Harvest Moon", rarity = Rarity.EPIC),
-    SOULBOUND(rarity = Rarity.EPIC, displayName = "Soulbound"),
-    LIGHTNING_STRIKE(rarity = Rarity.RARE, displayName = "Lightning Strike"),
+//    NATURES_ALLY(displayName = "Nature's Ally", rarity = Rarity.LEGENDARY),
+//    REAPER(displayName = "Reaper's Scythe", rarity = Rarity.EPIC),
+//    HARVEST_MOON(displayName = "Harvest Moon", rarity = Rarity.EPIC),
+//    SOULBOUND(rarity = Rarity.RARE, displayName = "Soulbound"),
+    LIGHTNING_STRIKE(rarity = Rarity.RARE, displayName = "ShockWave"),
     JETPACK(
         rarity = Rarity.RARE,
         displayName = "Jetpack"
     ),
+    LAVA_WALKER(rarity = Rarity.RARE, displayName = "Lava Walker"),
     CLOAKING(
         rarity = Rarity.COMMON,
         displayName = "Cloaking",
@@ -26,7 +27,7 @@ enum class CustomEnchantments(
             Material.BOW,
             Material.CROSSBOW
         ),
-        displayName = "Explosive Arrow",
+        displayName = "ShatterShot",
         rarity = Rarity.RARE
     ),
     MAGNET(
@@ -47,10 +48,10 @@ enum class CustomEnchantments(
             Material.DIAMOND_PICKAXE,
             Material.NETHERITE_PICKAXE
         ),
-        displayName = "Auto Smelter"
+        displayName = "Refinery"
     ),
     VAMPIRE(
-        displayName = "Life-steal",
+        displayName = "SoulLeech",
         rarity = Rarity.EPIC
     ),
     GRID_BREAKER(
@@ -62,7 +63,7 @@ enum class CustomEnchantments(
             Material.DIAMOND_PICKAXE,
             Material.NETHERITE_PICKAXE
         ),
-        displayName = "Grid Breaker",
+        displayName = "GigaBreaker",
         rarity = Rarity.EPIC
     );
 

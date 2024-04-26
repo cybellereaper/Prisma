@@ -3,7 +3,6 @@ package com.github.astridalia.enchantments.listeners
 import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Particle
-import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -24,9 +23,7 @@ object VampireHitListener : Listener {
         // Cooldown check
         val now = System.currentTimeMillis()
         val cooldownEnd = vampireCooldowns.getOrDefault(damager.uniqueId, 0L)
-        if (now < cooldownEnd) {
-            return // Still on cooldown, so don't proceed
-        }
+        if (now < cooldownEnd) return
 
         val itemInMainHand = damager.inventory.itemInMainHand
         val vampireLevel = itemInMainHand.getEnchantOf(CustomEnchantments.VAMPIRE)
@@ -35,13 +32,13 @@ object VampireHitListener : Listener {
         val entity = event.entity as? LivingEntity ?: return
         val baseHealthSteal = 2.0
         val healthSteal = baseHealthSteal * vampireLevel
-        val damagerNewHealth = (damager.health + healthSteal).coerceAtMost(
+        val damageNewHealth = (damager.health + healthSteal).coerceAtMost(
             damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 20.0
         )
 
         try {
             processingVampireHits.add(damager.uniqueId) // Mark as processing
-            damager.health = damagerNewHealth
+            damager.health = damageNewHealth
             val additionalDamage = 0.5 * vampireLevel
             entity.damage(additionalDamage, damager)
         } finally {

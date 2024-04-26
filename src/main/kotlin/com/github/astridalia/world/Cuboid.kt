@@ -21,16 +21,30 @@ data class Cuboid(
     constructor(cuboid: Cuboid) : this(cuboid.world, cuboid.minimumPoint, cuboid.maximumPoint)
 
     constructor(world: World, x1: Double, y1: Double, z1: Double, x2: Double, y2: Double, z2: Double) :
-            this(world, Vector(minOf(x1, x2), minOf(y1, y2), minOf(z1, z2)), Vector(maxOf(x1, x2), maxOf(y1, y2), maxOf(z1, z2)))
+            this(
+                world,
+                Vector(minOf(x1, x2), minOf(y1, y2), minOf(z1, z2)),
+                Vector(maxOf(x1, x2), maxOf(y1, y2), maxOf(z1, z2))
+            )
 
     constructor(blockPosOne: Location, blockPosTwo: Location) : this(
         blockPosOne.world ?: throw IllegalArgumentException("Location has no world"),
-        Vector(minOf(blockPosOne.x, blockPosTwo.x), minOf(blockPosOne.y, blockPosTwo.y), minOf(blockPosOne.z, blockPosTwo.z)),
-        Vector(maxOf(blockPosOne.x, blockPosTwo.x), maxOf(blockPosOne.y, blockPosTwo.y), maxOf(blockPosOne.z, blockPosTwo.z))
+        Vector(
+            minOf(blockPosOne.x, blockPosTwo.x),
+            minOf(blockPosOne.y, blockPosTwo.y),
+            minOf(blockPosOne.z, blockPosTwo.z)
+        ),
+        Vector(
+            maxOf(blockPosOne.x, blockPosTwo.x),
+            maxOf(blockPosOne.y, blockPosTwo.y),
+            maxOf(blockPosOne.z, blockPosTwo.z)
+        )
     )
 
     // Check if a location or vector is within the cuboid
-    fun contains(location: Location) = location.world == world && location.toVector().isInAABB(minimumPoint, maximumPoint)
+    fun contains(location: Location) =
+        location.world == world && location.toVector().isInAABB(minimumPoint, maximumPoint)
+
     fun contains(vector: Vector) = vector.isInAABB(minimumPoint, maximumPoint)
 
     // Serialize the cuboid data for configuration
