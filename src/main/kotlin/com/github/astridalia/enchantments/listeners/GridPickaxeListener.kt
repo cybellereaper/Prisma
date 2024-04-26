@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,11 +34,11 @@ object GridPickaxeListener : KoinComponent, Listener {
 
         // Check if the player has the Cubic Mining enchantment
         val itemInMainHand = player.inventory.itemInMainHand
-        val cubicMiningLevel = itemInMainHand.getEnchantOf(CustomEnchantments.GRID_BREAKER)
+        val cubicMiningLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.GRID_BREAKER)
         if (cubicMiningLevel <= 0) return
 
         // Check if the player has the Auto Smelting enchantment
-        val autoSmeltLevel = itemInMainHand.getEnchantOf(CustomEnchantments.AUTO_SMELT)
+        val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
         if (autoSmeltLevel > 0) AutoSmeltingListener.onBlockBreak(event)
 
         val cubeBlocks = getCubicBlocks(block, cubicMiningLevel)
@@ -75,7 +75,7 @@ object GridPickaxeListener : KoinComponent, Listener {
             val itemInMainHand = player.inventory.itemInMainHand
 
             // Apply AutoSmelting if the player has the enchantment
-            val autoSmeltLevel = itemInMainHand.getEnchantOf(CustomEnchantments.AUTO_SMELT)
+            val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
             if (autoSmeltLevel > 0) AutoSmeltingListener.onBlockBreak(event)
 
             // If the event was not cancelled by AutoSmelting, break the block naturally

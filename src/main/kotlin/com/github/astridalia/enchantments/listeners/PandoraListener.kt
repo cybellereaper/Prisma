@@ -1,14 +1,12 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.Fireball
 import org.bukkit.entity.Player
-import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -21,8 +19,8 @@ object PandoraListener : Listener {
     fun onEntityDamage(event: EntityDamageByEntityEvent) {
         val damager = event.damager as? Player ?: return
         val item = damager.inventory.itemInMainHand
-        val enchantOf = item.getEnchantOf(CustomEnchantments.PANDORA_BOX)
-        if(enchantOf <= 0) return
+        val enchantOf = item.getEnchantmentLevel(CustomEnchantments.PANDORA_BOX)
+        if (enchantOf <= 0) return
         activatePortalEffect(damager, enchantOf)
     }
 
@@ -46,10 +44,12 @@ object PandoraListener : Listener {
                 repeat(level) { world.spawnEntity(targetLocation, EntityType.ZOMBIE) }
                 playEffectSound(targetLocation, 0)
             }
+
             1 -> {
                 repeat(level) { world.spawnEntity(targetLocation, EntityType.FIREBALL) }
                 playEffectSound(targetLocation, 1)
             }
+
             2 -> {
                 repeat(level * 5) { world.spawnArrow(targetLocation, player.location.direction, 2.0f, 12.0f) }
                 playEffectSound(targetLocation, 2)
@@ -66,13 +66,13 @@ object PandoraListener : Listener {
     }
 
     private fun playEffectSound(location: Location, effectType: Int) {
-        val sound = when(effectType) {
+        val sound = when (effectType) {
             0 -> Sound.ENTITY_ZOMBIE_AMBIENT
             1 -> Sound.ENTITY_BLAZE_SHOOT
             2 -> Sound.ENTITY_ARROW_SHOOT
             else -> Sound.BLOCK_NOTE_BLOCK_BASS
         }
-        location.world?.playSound(location,sound,1.0f,1.0f)
+        location.world?.playSound(location, sound, 1.0f, 1.0f)
     }
 
     private fun playPortalSound(location: Location) {

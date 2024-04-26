@@ -1,7 +1,6 @@
 package com.github.astridalia.character
 
-import com.github.astridalia.character.CharacterProfile.applyStatistic
-import com.github.astridalia.enchantments.CustomEnchantment.namespacedKey
+import com.github.astridalia.enchantments.CustomEnchantment.toNamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
@@ -34,12 +33,12 @@ object CharacterProfile {
     }
 
     fun Player.setStatistic(statistics: Statistics, value: Int) {
-        val statisticsKey = statistics.name.lowercase().namespacedKey()
+        val statisticsKey = statistics.name.lowercase().toNamespacedKey()
         this.persistentDataContainer.set(statisticsKey, PersistentDataType.INTEGER, value)
     }
 
     fun Player.getStatistic(statistics: Statistics): Int {
-        val statisticsKey = statistics.name.lowercase().namespacedKey()
+        val statisticsKey = statistics.name.lowercase().toNamespacedKey()
         return this.persistentDataContainer.get(statisticsKey, PersistentDataType.INTEGER) ?: 0
     }
 }

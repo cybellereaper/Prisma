@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -36,7 +36,7 @@ object AutoSmeltingListener : Listener {
     fun onBlockBreak(event: BlockBreakEvent) {
         val player = event.player
         val itemInMainHand = player.inventory.itemInMainHand
-        val autoSmeltLevel = itemInMainHand.getEnchantOf(CustomEnchantments.AUTO_SMELT)
+        val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
 
         if (autoSmeltLevel <= 0) return
 

@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Particle
 import org.bukkit.attribute.Attribute
@@ -26,7 +26,7 @@ object VampireHitListener : Listener {
         if (now < cooldownEnd) return
 
         val itemInMainHand = damager.inventory.itemInMainHand
-        val vampireLevel = itemInMainHand.getEnchantOf(CustomEnchantments.VAMPIRE)
+        val vampireLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.VAMPIRE)
         if (vampireLevel <= 0) return
 
         val entity = event.entity as? LivingEntity ?: return

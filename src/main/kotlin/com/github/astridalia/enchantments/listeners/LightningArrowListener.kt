@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LightningStrike
@@ -19,7 +19,8 @@ object LightningArrowListener : Listener, KoinComponent {
     fun onProjectileHit(event: ProjectileHitEvent) {
         (event.entity as? Arrow)?.let { arrow ->
             arrowShooters[arrow]?.let { shooter ->
-                shooter.inventory.itemInMainHand.getEnchantOf(CustomEnchantments.LIGHTNING_STRIKE).takeIf { it > 0 }
+                shooter.inventory.itemInMainHand.getEnchantmentLevel(CustomEnchantments.LIGHTNING_STRIKE)
+                    .takeIf { it > 0 }
                     ?.also {
                         explodeArrow(arrow, it)
                         arrowShooters.remove(arrow)
@@ -41,7 +42,7 @@ object LightningArrowListener : Listener, KoinComponent {
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEntityShootBow(event: EntityShootBowEvent) {
         (event.entity as? Player)?.let { shooter ->
-            event.bow?.getEnchantOf(CustomEnchantments.LIGHTNING_STRIKE)?.takeIf { it > 0 }?.also {
+            event.bow?.getEnchantmentLevel(CustomEnchantments.LIGHTNING_STRIKE)?.takeIf { it > 0 }?.also {
                 (event.projectile as? Arrow)?.let { arrow -> arrowShooters[arrow] = shooter }
             }
         }

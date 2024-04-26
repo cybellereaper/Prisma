@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
@@ -22,7 +22,7 @@ object MagnetListener : Listener, KoinComponent {
         event.entity.getNearbyEntities(baseRadius, baseRadius, baseRadius).forEach { entity ->
             if (entity is Player) {
                 val itemInHand = entity.inventory.itemInMainHand
-                val magnetLevel = itemInHand.getEnchantOf(CustomEnchantments.MAGNET)
+                val magnetLevel = itemInHand.getEnchantmentLevel(CustomEnchantments.MAGNET)
                 if (magnetLevel > 0) pullItemToPlayer(event.entity, entity)
             }
         }

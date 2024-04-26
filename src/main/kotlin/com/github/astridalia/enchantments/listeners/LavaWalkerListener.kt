@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -32,7 +32,7 @@ object LavaWalkerListener : Listener, KoinComponent {
 
         val boots = player.inventory.boots ?: return
 
-        val enchantOf = boots.getEnchantOf(CustomEnchantments.LAVA_WALKER)
+        val enchantOf = boots.getEnchantmentLevel(CustomEnchantments.LAVA_WALKER)
         if (enchantOf <= 0) return
 
         playerTasks.computeIfAbsent(player.uniqueId) { startPlatformTask(player) }
@@ -49,7 +49,7 @@ object LavaWalkerListener : Listener, KoinComponent {
         val world = player.world
         val boots = player.inventory.boots ?: return
 
-        val lavaWalker = boots.getEnchantOf(CustomEnchantments.LAVA_WALKER)
+        val lavaWalker = boots.getEnchantmentLevel(CustomEnchantments.LAVA_WALKER)
         if (lavaWalker <= 0) {
             playerTasks.remove(player.uniqueId)?.cancel()
             return
@@ -96,7 +96,7 @@ object LavaWalkerListener : Listener, KoinComponent {
     fun onEntityDamage(event: EntityDamageEvent) {
         val player = event.entity as? Player ?: return
         val boots = player.inventory.boots ?: return
-        val enchantOf = boots.getEnchantOf(CustomEnchantments.LAVA_WALKER)
+        val enchantOf = boots.getEnchantmentLevel(CustomEnchantments.LAVA_WALKER)
         if (enchantOf <= 0) return
         when (event.cause) {
             EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.HOT_FLOOR, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.FIRE -> event.isCancelled =

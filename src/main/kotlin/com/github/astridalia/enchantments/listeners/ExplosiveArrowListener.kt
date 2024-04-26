@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments.listeners
 
-import com.github.astridalia.enchantments.CustomEnchantment.getEnchantOf
+import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -22,7 +22,8 @@ object ExplosiveArrowListener : Listener, KoinComponent {
     fun onProjectileHit(event: ProjectileHitEvent) {
         (event.entity as? Arrow)?.let { arrow ->
             arrowShooters[arrow]?.let { shooter ->
-                shooter.inventory.itemInMainHand.getEnchantOf(CustomEnchantments.EXPLOSIVE_ARROW).takeIf { it > 0 }
+                shooter.inventory.itemInMainHand.getEnchantmentLevel(CustomEnchantments.EXPLOSIVE_ARROW)
+                    .takeIf { it > 0 }
                     ?.also {
                         explodeArrow(arrow, EXPLOSION_POWER * it)
                         arrowShooters.remove(arrow)
@@ -53,7 +54,7 @@ object ExplosiveArrowListener : Listener, KoinComponent {
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEntityShootBow(event: EntityShootBowEvent) {
         (event.entity as? Player)?.let { shooter ->
-            event.bow?.getEnchantOf(CustomEnchantments.EXPLOSIVE_ARROW)?.takeIf { it > 0 }?.also {
+            event.bow?.getEnchantmentLevel(CustomEnchantments.EXPLOSIVE_ARROW)?.takeIf { it > 0 }?.also {
                 (event.projectile as? Arrow)?.let { arrow -> arrowShooters[arrow] = shooter }
             }
         }
