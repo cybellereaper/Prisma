@@ -22,6 +22,8 @@ enum class CustomEnchantments(
         rarity = Rarity.COMMON,
         displayName = "Cloaking",
     ),
+    PANDORA_BOX(rarity = Rarity.EPIC, displayName = "Pandora's Box"),
+    ENDER_INSTINCT_DODGE(rarity = Rarity.LEGENDARY, displayName = "Ender Instinct"),
     EXPLOSIVE_ARROW(
         onlyOn = listOf(
             Material.BOW,
@@ -38,6 +40,7 @@ enum class CustomEnchantments(
         displayName = "Teleport",
         rarity = Rarity.RARE
     ),
+    TREE_CHOPPER(displayName = "Tree Chopper", rarity = Rarity.COMMON),
     AUTO_SMELT(
         rarity = Rarity.EPIC,
         onlyOn = listOf(

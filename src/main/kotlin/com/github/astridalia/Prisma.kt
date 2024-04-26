@@ -2,6 +2,8 @@ package com.github.astridalia
 
 import co.aikar.commands.PaperCommandManager
 import com.github.astridalia.enchantments.listeners.*
+import com.github.astridalia.spells.SpellManager
+import com.github.astridalia.stamina.StaminaBar
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
@@ -21,6 +23,7 @@ class Prisma : JavaPlugin(), KoinComponent {
     private val damageIndicator by inject<DamageIndicator>()
 
     private val lavaWalkerListener by inject<LavaWalkerListener>()
+    private val staminaBar by inject<StaminaBar>()
 
     private val appModule = module {
         single { DamageIndicator }
@@ -32,12 +35,15 @@ class Prisma : JavaPlugin(), KoinComponent {
         single<Plugin> { this@Prisma }
         single {LavaWalkerListener}
         single { PaperCommandManager(get()) }
+        single { StaminaBar }
     }
 
     override fun onEnable() {
         startKoin {
             modules(appModule)
         }
+
+        SpellManager.testSpells()
 
         paperCommandManager.registerCommand(MyCommands)
         registerEventListeners(
@@ -49,7 +55,11 @@ class Prisma : JavaPlugin(), KoinComponent {
             LightningArrowListener,
             VampireHitListener,
             damageIndicator,
-            lavaWalkerListener
+            lavaWalkerListener,
+            EnderInstinctListener,
+            PandoraListener,
+            staminaBar,
+            SpellManager
         )
     }
 

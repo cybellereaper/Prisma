@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object EnchantmentSimpleAttacksListener : Listener {
+
     @EventHandler
     fun onDamage(event: EntityDamageByEntityEvent) {
         val damage = event.damager as? Player ?: return

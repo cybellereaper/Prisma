@@ -79,7 +79,7 @@ object GridPickaxeListener : KoinComponent, Listener {
             if (autoSmeltLevel > 0) AutoSmeltingListener.onBlockBreak(event)
 
             // If the event was not cancelled by AutoSmelting, break the block naturally
-            if (!event.isCancelled) cubeBlock.breakNaturally()
+            if (!event.isCancelled) cubeBlock.breakNaturally(itemInMainHand)
         }
     }
 
