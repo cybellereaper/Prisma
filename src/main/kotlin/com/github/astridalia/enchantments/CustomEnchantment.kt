@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments
 
-import com.github.astridalia.Rarity
+import com.github.astridalia.utils.Rarity
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta

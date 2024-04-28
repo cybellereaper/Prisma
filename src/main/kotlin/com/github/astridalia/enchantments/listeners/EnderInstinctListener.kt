@@ -41,8 +41,6 @@ object EnderInstinctListener : Listener {
     }
 
     private fun teleportWithEffect(player: Player) {
-
-
         val originalLocation = player.location.clone()
         val direction = originalLocation.direction.normalize()
         val potentialLocations = listOf(

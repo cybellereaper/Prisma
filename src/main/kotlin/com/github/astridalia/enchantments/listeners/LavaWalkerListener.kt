@@ -97,11 +97,7 @@ object LavaWalkerListener : Listener, KoinComponent {
         val enchantOf = boots.getEnchantmentLevel(CustomEnchantments.LAVA_WALKER)
         if (enchantOf <= 0) return
 
-        when (event.cause) {
-            EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.HOT_FLOOR, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.FIRE -> event.isCancelled =
-                true
-
-            else -> return
-        }
+        if (event.cause == EntityDamageEvent.DamageCause.LAVA || event.cause == EntityDamageEvent.DamageCause.HOT_FLOOR || event.cause == EntityDamageEvent.DamageCause.FIRE_TICK || event.cause == EntityDamageEvent.DamageCause.FIRE) event.isCancelled =
+            true
     }
 }

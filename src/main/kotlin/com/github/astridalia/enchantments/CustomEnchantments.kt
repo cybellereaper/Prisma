@@ -1,23 +1,36 @@
 package com.github.astridalia.enchantments
 
-import com.github.astridalia.Rarity
+import com.github.astridalia.utils.Rarity
 import org.bukkit.Material
 
 enum class CustomEnchantments(
     onlyOn: List<Material> = mutableListOf(),
     rarity: Rarity = Rarity.COMMON,
     val displayName: String,
+    val maxLevel: Int = 5,
 ) {
 //    NATURES_ALLY(displayName = "Nature's Ally", rarity = Rarity.LEGENDARY),
     REAPER(displayName = "Reaper's Scythe", rarity = Rarity.EPIC),
 //    HARVEST_MOON(displayName = "Harvest Moon", rarity = Rarity.EPIC),
-//    SOULBOUND(rarity = Rarity.RARE, displayName = "Soulbound"),
+    SOULBOUND(rarity = Rarity.RARE, displayName = "Soulbound"),
     LIGHTNING_STRIKE(rarity = Rarity.RARE, displayName = "ShockWave"),
     JETPACK(
         rarity = Rarity.RARE,
         displayName = "Jetpack"
     ),
-    LAVA_WALKER(rarity = Rarity.RARE, displayName = "Lava Walker"),
+
+    LAVA_WALKER(
+        listOf(
+            Material.IRON_BOOTS,
+            Material.DIAMOND_BOOTS,
+            Material.NETHERITE_BOOTS,
+            Material.CHAINMAIL_BOOTS,
+            Material.LEATHER_BOOTS,
+            Material.GOLDEN_BOOTS,
+            Material.IRON_BOOTS,
+        ),
+        rarity = Rarity.RARE,
+        displayName = "Lava Walker"),
     CLOAKING(
         rarity = Rarity.COMMON,
         displayName = "Cloaking",
@@ -40,7 +53,17 @@ enum class CustomEnchantments(
         displayName = "Teleport",
         rarity = Rarity.RARE
     ),
-    TREE_CHOPPER(displayName = "Tree Chopper", rarity = Rarity.COMMON),
+    TREE_CHOPPER(
+        onlyOn = listOf(
+            Material.STONE_PICKAXE,
+            Material.WOODEN_PICKAXE,
+            Material.IRON_PICKAXE,
+            Material.GOLDEN_PICKAXE,
+            Material.DIAMOND_PICKAXE,
+            Material.NETHERITE_PICKAXE
+        ),
+        displayName = "Timber",
+        rarity = Rarity.COMMON),
     AUTO_SMELT(
         listOf(
             Material.STONE_PICKAXE,

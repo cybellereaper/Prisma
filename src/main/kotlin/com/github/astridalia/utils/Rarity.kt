@@ -1,4 +1,4 @@
-package com.github.astridalia
+package com.github.astridalia.utils
 
 import org.bukkit.ChatColor
 
