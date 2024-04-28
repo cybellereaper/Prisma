@@ -1,5 +1,9 @@
 package com.github.astridalia.spells
 
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -36,6 +40,7 @@ object SpellManager : Listener {
                 player.sendMessage("You have launched a Fireball!")
             }
         )
+
         registerSpell(spell)
     }
 
@@ -43,6 +48,8 @@ object SpellManager : Listener {
     fun onPlayerInteract(event: PlayerInteractEvent) {
         val player = event.player
         val action = event.action
+        val cursor = player.inventory.itemInMainHand
+        if (cursor.type != Material.STICK) return
         val clickType = when {
             action.name.contains("LEFT_CLICK") -> "LEFT"
             action.name.contains("RIGHT_CLICK") -> "RIGHT"
@@ -55,6 +62,9 @@ object SpellManager : Listener {
         }
         clickData.clicks.add(clickType)
         clickData.lastClickTime = System.currentTimeMillis()
+        val actionBarMessage = "Clicks: ${clickData.clicks.joinToString(" ")}"
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(actionBarMessage))
+        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
         spells.forEach { spell ->
             if (clickData.clicks.takeLast(spell.sequence.size) == spell.sequence) {
                 when (spell.mode) {
@@ -72,7 +82,10 @@ object SpellManager : Listener {
                         spell.action(player, player)
                     }
                 }
+
                 clickData.clicks.clear()
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(""))
+                player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f)
             }
         }
     }

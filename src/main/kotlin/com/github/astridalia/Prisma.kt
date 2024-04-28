@@ -20,6 +20,7 @@ class Prisma : JavaPlugin(), KoinComponent {
     private val magnetListener by inject<MagnetListener>()
     private val explosiveArrows by inject<ExplosiveArrowListener>()
     private val damageIndicator by inject<DamageIndicator>()
+    private val enchantmentSimpleAttacksListener by inject<EnchantmentSimpleAttacksListener>()
 
     private val lavaWalkerListener by inject<LavaWalkerListener>()
 
@@ -33,6 +34,7 @@ class Prisma : JavaPlugin(), KoinComponent {
         single<Plugin> { this@Prisma }
         single { LavaWalkerListener }
         single { PaperCommandManager(get()) }
+        single { EnchantmentSimpleAttacksListener }
     }
 
     override fun onEnable() {
@@ -48,7 +50,7 @@ class Prisma : JavaPlugin(), KoinComponent {
             autoSmelting,
             magnetListener,
             explosiveArrows,
-            EnchantmentSimpleAttacksListener,
+            enchantmentSimpleAttacksListener,
             LightningArrowListener,
             VampireHitListener,
             damageIndicator,

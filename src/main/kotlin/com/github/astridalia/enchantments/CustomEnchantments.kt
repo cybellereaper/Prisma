@@ -9,7 +9,7 @@ enum class CustomEnchantments(
     val displayName: String,
 ) {
 //    NATURES_ALLY(displayName = "Nature's Ally", rarity = Rarity.LEGENDARY),
-//    REAPER(displayName = "Reaper's Scythe", rarity = Rarity.EPIC),
+    REAPER(displayName = "Reaper's Scythe", rarity = Rarity.EPIC),
 //    HARVEST_MOON(displayName = "Harvest Moon", rarity = Rarity.EPIC),
 //    SOULBOUND(rarity = Rarity.RARE, displayName = "Soulbound"),
     LIGHTNING_STRIKE(rarity = Rarity.RARE, displayName = "ShockWave"),
@@ -36,7 +36,6 @@ enum class CustomEnchantments(
         displayName = "Magnet",
         rarity = Rarity.RARE
     ),
-    SLIME_JUMP(displayName = "Slime Jump", rarity = Rarity.RARE),
     TELEPORT(
         displayName = "Teleport",
         rarity = Rarity.RARE
