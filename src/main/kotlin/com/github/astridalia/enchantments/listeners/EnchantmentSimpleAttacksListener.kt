@@ -3,7 +3,6 @@ package com.github.astridalia.enchantments.listeners
 import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import com.github.astridalia.utils.CooldownManager
-import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -14,6 +13,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.enchantment.EnchantItemEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -25,7 +25,6 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -40,12 +39,14 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         val reaperLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.REAPER)
         if (reaperLevel <= 0) return
         val entity = event.entity as? LivingEntity ?: return
-        val baseChance = 0.001
-        val levelEffect = 0.05 * reaperLevel
+        val baseChance = 0.000_0001
+        val levelEffect = 0.02 * reaperLevel
         val finalChance = baseChance + levelEffect
         if (Math.random() < finalChance) {
             reaperEffect(entity)
             event.damage = entity.health + 1.0
+            applyDurability(itemInMainHand, reaperLevel, damage)
+            damage.damage(12.5)
         }
     }
 
@@ -118,6 +119,12 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         // Prevent default block break to handle it manually
         event.isCancelled = true
         chopTree(block, player, itemInMainHand)
+        applyDurability(itemInMainHand, treeChopperLevel, player)
+    }
+
+    private fun applyDurability(item: ItemStack, blocksBroken: Int, player: Player) {
+        val damage = blocksBroken * 4 // You can adjust this if you want different durability loss rates
+        item.damage(damage, player)
     }
 
     private fun chopTree(startBlock: Block, player: Player, itemStack: ItemStack) {
@@ -174,6 +181,12 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
             // Set cooldown using CooldownManager
             CooldownManager.setCooldown(player.uniqueId, CooldownManager.CooldownCause.ENCHANTMENT, 10000) // 10 seconds cooldown
         }
+    }
+
+    @EventHandler
+    fun onPlayerEnchant(event: EnchantItemEvent) {
+        val itemInHand = event.item
+        CustomEnchantments.getRandomEnchantment(itemInHand)
     }
 
     @EventHandler
