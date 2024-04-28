@@ -56,7 +56,7 @@ class Prisma : JavaPlugin(), KoinComponent {
             EnderInstinctListener,
             PandoraListener,
             SpellManager,
-            PentagramTestListener
+            PentagramTestListener,
         )
     }
 

@@ -3,9 +3,7 @@ package com.github.astridalia.enchantments.listeners
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.World
-import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerMoveEvent
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -14,10 +12,12 @@ object PentagramTestListener : Listener {
     fun getPentagramPoints(center: Location, radius: Double, height: Double, rotation: Double): List<Location> {
         return (0..4).map {
             val angle = 2 * Math.PI * it / 5 + Math.toRadians(rotation - 18.0)  // Starts from the top and rotates
-            Location(center.world,
+            Location(
+                center.world,
                 center.x + radius * cos(angle),
                 center.y + height,
-                center.z + radius * sin(angle))
+                center.z + radius * sin(angle)
+            )
         }
     }
 
@@ -36,7 +36,18 @@ object PentagramTestListener : Listener {
             val x = start.x + (end.x - start.x) * i / count
             val y = start.y + (end.y - start.y) * i / count
             val z = start.z + (end.z - start.z) * i / count
-            world.spawnParticle(Particle.REDSTONE, x, y, z, 1, 0.0, 0.0, 0.0, 0.0, Particle.DustOptions(org.bukkit.Color.BLUE, 1.0f))
+            world.spawnParticle(
+                Particle.REDSTONE,
+                x,
+                y,
+                z,
+                1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                Particle.DustOptions(org.bukkit.Color.BLUE, 1.0f)
+            )
         }
     }
 

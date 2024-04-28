@@ -36,14 +36,14 @@ enum class CustomEnchantments(
         displayName = "Magnet",
         rarity = Rarity.RARE
     ),
+    SLIME_JUMP(displayName = "Slime Jump", rarity = Rarity.RARE),
     TELEPORT(
         displayName = "Teleport",
         rarity = Rarity.RARE
     ),
     TREE_CHOPPER(displayName = "Tree Chopper", rarity = Rarity.COMMON),
     AUTO_SMELT(
-        rarity = Rarity.EPIC,
-        onlyOn = listOf(
+        listOf(
             Material.STONE_PICKAXE,
             Material.WOODEN_PICKAXE,
             Material.IRON_PICKAXE,
@@ -51,6 +51,7 @@ enum class CustomEnchantments(
             Material.DIAMOND_PICKAXE,
             Material.NETHERITE_PICKAXE
         ),
+        rarity = Rarity.EPIC,
         displayName = "Refinery"
     ),
     VAMPIRE(

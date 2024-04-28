@@ -14,6 +14,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
@@ -41,7 +42,7 @@ object GridPickaxeListener : KoinComponent, Listener {
         val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
         if (autoSmeltLevel > 0) AutoSmeltingListener.onBlockBreak(event)
 
-        val cubeBlocks = getCubicBlocks(block, cubicMiningLevel)
+        val cubeBlocks = getCubicBlocks(block, cubicMiningLevel, itemInMainHand)
 
         // Delay the execution of breakCubicBlocks
         scope.launch {
@@ -83,13 +84,15 @@ object GridPickaxeListener : KoinComponent, Listener {
         }
     }
 
-    private fun getCubicBlocks(centerBlock: Block, enchantmentLevel: Int): List<Block> {
+    private fun getCubicBlocks(centerBlock: Block, enchantmentLevel: Int, itemStack: ItemStack): List<Block> {
         val radius = enchantmentLevel // Adjust radius based on enchantment level
         val cubeBlocks = mutableListOf<Block>()
         for (dx in -radius..radius) for (dy in -radius..radius) for (dz in -radius..radius) {
             if (dx == 0 && dy == 0 && dz == 0) continue // Skip the center block
             val block = centerBlock.world.getBlockAt(centerBlock.x + dx, centerBlock.y + dy, centerBlock.z + dz)
-            if (!block.type.isAir && !isUnbreakable(block.type)) cubeBlocks.add(block)
+            if (!block.type.isAir && !isUnbreakable(block.type) && block.isPreferredTool(itemStack)) cubeBlocks.add(
+                block
+            )
         }
         return cubeBlocks
     }

@@ -38,12 +38,11 @@ object LavaWalkerListener : Listener, KoinComponent {
         playerTasks.computeIfAbsent(player.uniqueId) { startPlatformTask(player) }
     }
 
-    private fun startPlatformTask(player: Player): BukkitTask {
-        return Bukkit.getScheduler().runTaskTimer(javaPlugin, Runnable {
+    private fun startPlatformTask(player: Player): BukkitTask =
+        Bukkit.getScheduler().runTaskTimer(javaPlugin, Runnable {
             maintainPlatform(player)
             player.fireTicks = 0
-        }, 0L, 1L) // Run task every tick
-    }
+        }, 0L, 1L)
 
     private fun maintainPlatform(player: Player) {
         val world = player.world
@@ -56,17 +55,15 @@ object LavaWalkerListener : Listener, KoinComponent {
         }
 
         val radius = 1  // This creates a 3x3 platform (player in the center)
-        for (dx in -radius..radius) {
-            for (dz in -radius..radius) {
-                val block = world.getBlockAt(player.location.add(dx.toDouble(), -1.0, dz.toDouble()))
-                if (block.type == Material.LAVA && block.blockData is Levelled) {
-                    val levelled = block.blockData as Levelled
-                    if (levelled.level == 0) {  // Check if it's a full lava block (source block)
-                        block.type = Material.MAGMA_BLOCK
-                        world.spawnParticle(Particle.LAVA, block.location.add(0.5, 0.5, 0.5), 30, 0.5, 0.5, 0.5, 0.05)
-                        world.playSound(block.location, Sound.BLOCK_LAVA_POP, 1f, 1f)
-                        Material.LAVA.scheduleBlockReset(block)
-                    }
+        for (dx in -radius..radius) for (dz in -radius..radius) {
+            val block = world.getBlockAt(player.location.add(dx.toDouble(), -1.0, dz.toDouble()))
+            if (block.type == Material.LAVA && block.blockData is Levelled) {
+                val levelled = block.blockData as Levelled
+                if (levelled.level == 0) {  // Check if it's a full lava block (source block)
+                    block.type = Material.MAGMA_BLOCK
+                    world.spawnParticle(Particle.LAVA, block.location.add(0.5, 0.5, 0.5), 30, 0.5, 0.5, 0.5, 0.05)
+                    world.playSound(block.location, Sound.BLOCK_LAVA_POP, 1f, 1f)
+                    Material.LAVA.scheduleBlockReset(block)
                 }
             }
         }
@@ -96,11 +93,14 @@ object LavaWalkerListener : Listener, KoinComponent {
     fun onEntityDamage(event: EntityDamageEvent) {
         val player = event.entity as? Player ?: return
         val boots = player.inventory.boots ?: return
+
         val enchantOf = boots.getEnchantmentLevel(CustomEnchantments.LAVA_WALKER)
         if (enchantOf <= 0) return
+
         when (event.cause) {
             EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.HOT_FLOOR, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.FIRE -> event.isCancelled =
                 true
+
             else -> return
         }
     }

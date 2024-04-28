@@ -37,14 +37,15 @@ object AutoSmeltingListener : Listener {
         val player = event.player
         val itemInMainHand = player.inventory.itemInMainHand
         val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
-
         if (autoSmeltLevel <= 0) return
 
+
         smeltableMaterials[event.block.type]?.let { smeltedMaterial ->
+            if (!event.block.isPreferredTool(itemInMainHand)) return
             event.isCancelled = true
             event.block.type = Material.AIR
 
-            // Drop the smelted item and capture the returned entity
+
             val droppedItem =
                 event.block.world.dropItemNaturally(event.block.location.add(0.5, 0.5, 0.5), ItemStack(smeltedMaterial))
 
@@ -52,7 +53,7 @@ object AutoSmeltingListener : Listener {
             val taskId = IntArray(1)
 
             // Schedule a repeating task to create a lingering effect
-            taskId[0] = Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, Runnable {
+            taskId[0] = Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, {
                 if (!droppedItem.isValid || droppedItem.isDead) {
                     Bukkit.getScheduler().cancelTask(taskId[0]) // Use the task ID from the array to cancel the task
                 } else {
