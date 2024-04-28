@@ -30,9 +30,19 @@ enum class CustomEnchantments(
     SOULBOUND(rarity = Rarity.RARE, displayName = "Soulbound", enchantmentPercentage = 0.35),
     LIGHTNING_STRIKE(rarity = Rarity.RARE, displayName = "ShockWave", enchantmentPercentage = 0.35),
     JETPACK(
+        listOf(
+            Material.BOOK,
+            Material.ELYTRA,
+            Material.CHAINMAIL_CHESTPLATE,
+            Material.DIAMOND_CHESTPLATE,
+            Material.NETHERITE_CHESTPLATE,
+            Material.LEATHER_CHESTPLATE,
+            Material.GOLDEN_CHESTPLATE,
+            Material.IRON_CHESTPLATE,
+        ),
         rarity = Rarity.RARE,
         displayName = "Jetpack",
-        enchantmentPercentage = 0.15,
+        enchantmentPercentage = 0.01,
     ),
 
     LAVA_WALKER(
