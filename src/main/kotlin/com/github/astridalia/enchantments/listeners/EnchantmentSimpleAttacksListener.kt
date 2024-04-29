@@ -27,6 +27,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.random.Random
 
 
 object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
@@ -108,6 +109,35 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
     }
 
     @EventHandler
+    fun onBlockBreakWithGathering(event: BlockBreakEvent) {
+        val player = event.player
+        val itemInMainHand = player.inventory.itemInMainHand
+        val gatheringLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.GATHERING)
+        if (gatheringLevel <= 0) return
+        val block = event.block
+        if (!block.isPreferredTool(itemInMainHand)) return
+
+        // Prevent the block from dropping items normally
+        event.isDropItems = false
+
+        // Calculate drops based on the enchantment level
+        val drops = block.getDrops(itemInMainHand, player)
+        val multipliedDrops = ArrayList<ItemStack>()
+
+        // Multiply each drop by the enchantment level
+        for (item in drops) {
+            val multipliedItem = item.clone()
+            multipliedItem.amount *= gatheringLevel
+            multipliedDrops.add(multipliedItem)
+        }
+
+        // Drop the items in the world
+        for (item in multipliedDrops) {
+            block.world.dropItemNaturally(block.location, item)
+        }
+    }
+
+    @EventHandler
     fun onTreeChopper(event: BlockBreakEvent) {
         val player = event.player
         val itemInMainHand = player.inventory.itemInMainHand
@@ -147,6 +177,75 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
                     blocksToCheck.add(rel)
                 }
             }
+        }
+    }
+
+
+    @EventHandler
+    fun onPlayerDamageWithPrecision(event: EntityDamageByEntityEvent) {
+        val player = event.entity as? Player ?: return
+        val itemInMainHand = player.inventory.itemInMainHand
+        val precisionLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.PRECISION)
+        if (precisionLevel <= 0) return
+        val damage = event.damage
+        val baseChance = 0.2
+        val levelEffect = (precisionLevel - 1) * 0.05
+        val chance = baseChance + levelEffect
+        if (Random.nextDouble() < chance) {
+            event.damage = damage * 2
+            player.world.playSound(player.location, Sound.ENTITY_GENERIC_HURT, 1.0f, 1.0f)
+        }
+    }
+
+    @EventHandler
+    fun onPlayerDamageWithVenom(event: EntityDamageByEntityEvent) {
+        val player = event.entity as? Player ?: return
+        val itemInMainHand = player.inventory.itemInMainHand
+        val venomLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.VENOMOUS)
+        if (venomLevel <= 0) return
+        val damage = event.damage
+        val baseChance = 0.2
+        val levelEffect = (venomLevel - 1) * 0.05
+        val chance = baseChance + levelEffect
+        if (Random.nextDouble() < chance) {
+            event.damage = damage * 2
+            player.world.playSound(player.location, Sound.ENTITY_GENERIC_HURT, 1.0f, 1.0f)
+            player.addPotionEffect(PotionEffect(PotionEffectType.POISON, 20 * 3, 1 * venomLevel))
+        }
+    }
+
+
+    @EventHandler
+    fun onPlayerDamageWithFrostbite(event: EntityDamageByEntityEvent) {
+        val player = event.entity as? Player ?: return
+        val itemInMainHand = player.inventory.itemInMainHand
+        val frostbiteLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.FROSTBITE)
+        if (frostbiteLevel <= 0) return
+        val damage = event.damage
+        val baseChance = 0.2
+        val levelEffect = (frostbiteLevel - 1) * 0.05
+        val chance = baseChance + levelEffect
+        if (Random.nextDouble() < chance) {
+            event.damage = damage * 2
+            player.world.playSound(player.location, Sound.BLOCK_SNOW_HIT, 1.0f, 1.0f)
+            player.world.spawnParticle(Particle.SNOW_SHOVEL, player.location, 10, 0.5, 0.5, 0.5, 0.1)
+            player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 20 * 5, 1 * frostbiteLevel, true, false, false))
+            player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * 5, 1 * frostbiteLevel, true, false, false))
+
+            // Schedule a task to damage the player every 5 seconds for 30 seconds
+            object : BukkitRunnable() {
+                private var count = 0
+
+                override fun run() {
+                    if (count >= 6) {  // 6 times for 30 seconds, as 5s * 6 = 30s
+                        this.cancel()
+                    } else {
+                        // Apply damage every 5 seconds
+                        player.damage(damage)
+                        count++
+                    }
+                }
+            }.runTaskTimer(javaPlugin, 0L, 100L) // 100 ticks = 5 seconds
         }
     }
 
