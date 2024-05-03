@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerRespawnEvent
+import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
@@ -25,6 +26,7 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
@@ -137,6 +139,27 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         }
     }
 
+    private val lastSneakTimes: MutableMap<UUID, Long> = HashMap()
+
+    private fun isDoubleSneak(player: Player): Boolean {
+        val now = System.currentTimeMillis()
+        val lastSneakTime = lastSneakTimes.getOrDefault(player.uniqueId, 0L)
+        lastSneakTimes[player.uniqueId] = now
+
+        // Check if the current sneak is within 500 milliseconds of the last sneak
+        return now - lastSneakTime < 500
+    }
+
+    @EventHandler
+    fun onToggleSneak(event: PlayerToggleSneakEvent) {
+        if (event.isSneaking && isDoubleSneak(event.player)) {
+            // Dismount all passengers when double sneaking
+            if(event.player.passengers.isEmpty()) return
+            event.player.passengers.forEach { it.eject() }
+            event.player.sendMessage("All passengers have been ejected.")
+        }
+    }
+
     @EventHandler
     fun onTreeChopper(event: BlockBreakEvent) {
         val player = event.player
@@ -180,7 +203,6 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         }
     }
 
-
     @EventHandler
     fun onPlayerDamageWithPrecision(event: EntityDamageByEntityEvent) {
         val damage = event.damager as? Player ?: return
@@ -207,8 +229,8 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
 
     @EventHandler
     fun onPlayerDamageWithFrostbite(event: EntityDamageByEntityEvent) {
-        val damager = event.damager as? Player ?: return
-        val itemInMainHand = damager.inventory.itemInMainHand
+        val damage = event.damager as? Player ?: return
+        val itemInMainHand = damage.inventory.itemInMainHand
         val frostbiteLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.FROSTBITE)
         if (frostbiteLevel <= 0) return
 
@@ -238,7 +260,8 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         if (event.action.name.contains("RIGHT_CLICK")) {
             // Check for cooldown using CooldownManager
             if (CooldownManager.isCooldownActive(player.uniqueId, CooldownManager.CooldownCause.ENCHANTMENT)) {
-                val remainingTime = CooldownManager.getRemainingCooldown(player.uniqueId, CooldownManager.CooldownCause.ENCHANTMENT)
+                val remainingTime =
+                    CooldownManager.getRemainingCooldown(player.uniqueId, CooldownManager.CooldownCause.ENCHANTMENT)
                 val remainingSeconds = remainingTime / 1000
                 player.sendMessage("§cTeleport is on cooldown. Please wait $remainingSeconds seconds.")
                 return
@@ -255,7 +278,11 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
             player.world.playSound(newLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f)
 
             // Set cooldown using CooldownManager
-            CooldownManager.setCooldown(player.uniqueId, CooldownManager.CooldownCause.ENCHANTMENT, 10000) // 10 seconds cooldown
+            CooldownManager.setCooldown(
+                player.uniqueId,
+                CooldownManager.CooldownCause.ENCHANTMENT,
+                10000
+            ) // 10 seconds cooldown
         }
     }
 

@@ -21,10 +21,13 @@ class Prisma : JavaPlugin(), KoinComponent {
     private val explosiveArrows by inject<ExplosiveArrowListener>()
     private val damageIndicator by inject<DamageIndicator>()
     private val enchantmentSimpleAttacksListener by inject<EnchantmentSimpleAttacksListener>()
+    private val myCommands by inject<MyCommands>()
+
 
     private val lavaWalkerListener by inject<LavaWalkerListener>()
 
     private val appModule = module {
+        single { MyCommands }
         single { DamageIndicator }
         single { ExplosiveArrowListener }
         single { MagnetListener }
@@ -41,10 +44,10 @@ class Prisma : JavaPlugin(), KoinComponent {
         startKoin {
             modules(appModule)
         }
-
+        
         SpellManager.testSpells()
 
-        paperCommandManager.registerCommand(MyCommands)
+        paperCommandManager.registerCommand(myCommands)
         registerEventListeners(
             gridPickaxe,
             autoSmelting,
@@ -57,8 +60,7 @@ class Prisma : JavaPlugin(), KoinComponent {
             lavaWalkerListener,
             EnderInstinctListener,
             PandoraListener,
-            SpellManager,
-            PentagramTestListener,
+            SpellManager
         )
     }
 

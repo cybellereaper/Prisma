@@ -1,6 +1,6 @@
 package com.github.astridalia.utils
 
-import java.util.UUID
+import java.util.*
 
 object CooldownManager {
     enum class CooldownCause {

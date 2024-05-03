@@ -14,6 +14,7 @@ repositories {
     maven("https://repo.aikar.co/content/groups/aikar/")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://jitpack.io")
 }
 
 dependencies {

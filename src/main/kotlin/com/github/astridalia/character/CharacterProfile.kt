@@ -28,8 +28,10 @@ object CharacterProfile {
         val classStrength = getStatistic(Statistics.STRENGTH)
         val classDefense = getStatistic(Statistics.DEFENSE)
         val classAgility = getStatistic(Statistics.AGILITY)
-        this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = max((baseHealth + (classDefense*2)+classStrength), 20.0)
-        this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue = max((baseAttack + (classStrength*0.5)+(classAgility*0.2)), 1.0)
+        this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue =
+            max((baseHealth + (classDefense * 2) + classStrength), 20.0)
+        this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue =
+            max((baseAttack + (classStrength * 0.5) + (classAgility * 0.2)), 1.0)
     }
 
     fun Player.setStatistic(statistics: Statistics, value: Int) {
