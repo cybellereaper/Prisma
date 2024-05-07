@@ -9,36 +9,20 @@ import com.github.astridalia.character.CharacterProfile.applyStatistic
 import com.github.astridalia.enchantments.CustomEnchantment.applyEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.removeEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.setEnchantmentLevel
-import com.github.astridalia.enchantments.CustomEnchantment.toNamespacedKey
 import com.github.astridalia.enchantments.CustomEnchantments
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataType
 import org.koin.core.component.KoinComponent
-import java.util.*
 
 @CommandAlias("prisma|pa")
 object MyCommands : BaseCommand(), KoinComponent {
-
-    fun Player.debug(message: String) {
-        if (!this.isOp) return
-        val pdc = this.persistentDataContainer
-        val orDefault = pdc.getOrDefault("debug".toNamespacedKey(), PersistentDataType.BOOLEAN, false)
-        pdc.set("debug".toNamespacedKey(), PersistentDataType.BOOLEAN, !orDefault)
-        this.sendMessage("Debugger: $message")
-
-        println(
-            "<${player?.name}:Debugger> $message"
-        )
-    }
-
     enum class CommandOptions {
         REMOVE, ADD, SET
     }
 
     @CommandAlias("heal")
     @CommandPermission("prisma.heal.other")
-    fun heal(@Flags("other") target: Player) {
+    fun heal(target: Player) {
         target.health = target.maxHealth
         target.foodLevel = 20
         target.sendMessage("You have been healed")
@@ -59,12 +43,6 @@ object MyCommands : BaseCommand(), KoinComponent {
     @CommandPermission("prisma.enderchest.other")
     fun enderChest(player: Player, @Flags("other") target: Player) {
         player.openInventory(target.enderChest)
-    }
-
-    @CommandAlias("enderchest")
-    @CommandPermission("prisma.enderchest")
-    fun enderChestSelf(player: Player) {
-        player.openInventory(player.enderChest)
     }
 
     @CommandAlias("invsee")
@@ -92,7 +70,7 @@ object MyCommands : BaseCommand(), KoinComponent {
 
     @CommandAlias("flight|fly")
     @CommandPermission("prisma.flight")
-    fun toggleFlight(@Flags("other") target: Player) {
+    fun toggleFlight(target: Player) {
         // Toggle the allowFlight status
         target.allowFlight = !target.allowFlight
 
@@ -118,6 +96,10 @@ object MyCommands : BaseCommand(), KoinComponent {
     @CommandAlias("ride")
     @CommandPermission("prisma.ride")
     fun ride(player: Player, @Flags("other") target: Player) {
+        if (player === target) {
+            player.sendMessage("You cannot ride yourself")
+            return
+        }
         target.sendMessage("You have been ride by ${player.name}")
         player.sendMessage("You have ride ${target.name}")
         target.addPassenger(player)
@@ -125,7 +107,7 @@ object MyCommands : BaseCommand(), KoinComponent {
 
     @CommandAlias("enchantments")
     @CommandPermission("prisma.enchant")
-    fun enchant(@Flags("other") player: Player, options: CommandOptions, customEnchantments: CustomEnchantments, level: Int) {
+    fun enchant(player: Player, options: CommandOptions, customEnchantments: CustomEnchantments, level: Int) {
         val item = player.inventory.itemInMainHand
         when (options) {
             CommandOptions.ADD -> item.applyEnchantment(customEnchantments, level)

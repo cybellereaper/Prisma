@@ -1180,6 +1180,59 @@
                 </messages>
                 <updatedAt value="2024-05-02T18:06:50.8162831" />
               </chat>
+              <chat>
+                <internalId value="e5061653-419c-4955-ba2a-c29607572078" />
+              </chat>
+              <chat>
+                <internalId value="72c195cf-6275-46e5-b3e3-70856e43db7a" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="57967a78-3a01-4566-84d9-c0b1ca4cb108" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8d28e635-c108-4230-9550-0e4ffec89311" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="c243bea7-7456-4ede-8f35-87b49b026b42" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="99438cc4-90f1-46f0-97ba-898e158181e4" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
             </list>
           </chats>
           <defaultLlm>
