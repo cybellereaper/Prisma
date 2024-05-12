@@ -1,6 +1,8 @@
 package com.github.astridalia.enchantments.listeners
 
 import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
+import com.github.astridalia.enchantments.CustomEnchantment.removeEnchantment
+import com.github.astridalia.enchantments.CustomEnchantment.setEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import com.github.astridalia.utils.CooldownManager
 import org.bukkit.Particle
@@ -89,6 +91,11 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
             it.getEnchantmentLevel(CustomEnchantments.SOULBOUND) > 0
         }
         event.drops.removeIf { drop -> soulboundItems.any { it.isSimilar(drop) } }
+        soulboundItems.forEach { item ->
+            val currentLevel = item.getEnchantmentLevel(CustomEnchantments.SOULBOUND)
+            if (currentLevel > 1)
+                item.setEnchantmentLevel(CustomEnchantments.SOULBOUND, currentLevel - 1) else item.removeEnchantment(CustomEnchantments.SOULBOUND)
+        }
         keepItems[player] = soulboundItems
     }
 
@@ -247,6 +254,7 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
             target.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * 5, frostbiteLevel - 1))
         }
     }
+
 
 
     @EventHandler

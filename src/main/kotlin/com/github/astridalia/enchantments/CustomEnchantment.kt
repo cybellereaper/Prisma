@@ -1,13 +1,17 @@
 package com.github.astridalia.enchantments
 
 import com.github.astridalia.utils.Rarity
+import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
+
 
 object CustomEnchantment : KoinComponent {
     private val plugin: JavaPlugin by inject()
@@ -27,6 +31,8 @@ object CustomEnchantment : KoinComponent {
             updateItemLore(customEnchantments, this, level)
         }
     }
+
+
 
     fun ItemStack.removeEnchantment(customEnchantments: CustomEnchantments) {
         updateMeta {
@@ -91,11 +97,10 @@ object CustomEnchantment : KoinComponent {
         return rarityColor + numeral
     }
 
-    fun ItemStack.getEnchantmentLevel(customEnchantments: CustomEnchantments): Int {
-        return itemMeta?.persistentDataContainer?.getOrDefault(
+    fun ItemStack.getEnchantmentLevel(customEnchantments: CustomEnchantments): Int =
+        itemMeta?.persistentDataContainer?.getOrDefault(
             customEnchantments.name.lowercase().toNamespacedKey(),
             PersistentDataType.INTEGER,
             0
         ) ?: 0
-    }
 }

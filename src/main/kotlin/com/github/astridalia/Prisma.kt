@@ -2,7 +2,6 @@ package com.github.astridalia
 
 import co.aikar.commands.PaperCommandManager
 import com.github.astridalia.enchantments.listeners.*
-import com.github.astridalia.spells.SpellManager
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
@@ -43,10 +42,11 @@ class Prisma : JavaPlugin(), KoinComponent {
             modules(appModule)
         }
         
-        SpellManager.testSpells()
+//        SpellManager.testSpells()
 
         paperCommandManager.registerCommand(myCommands)
         registerEventListeners(
+            CreativeProtection,
             gridPickaxe,
             autoSmelting,
             magnetListener,
@@ -57,7 +57,7 @@ class Prisma : JavaPlugin(), KoinComponent {
             lavaWalkerListener,
             EnderInstinctListener,
             PandoraListener,
-            SpellManager
+//            SpellManager
         )
     }
 
