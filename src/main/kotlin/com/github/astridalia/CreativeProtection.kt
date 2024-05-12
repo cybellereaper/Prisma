@@ -11,10 +11,30 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.inventory.ItemStack
+import java.util.*
 
 object CreativeProtection : Listener {
+    private val inventoryManager = mutableMapOf<UUID, Array<ItemStack?>>()
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onGamemodeChange(event: PlayerGameModeChangeEvent) {
+        val player = event.player
+        val uniqueId = player.uniqueId
+        if (event.newGameMode == GameMode.CREATIVE) {
+            inventoryManager[uniqueId] = player.inventory.contents.clone()
+            player.inventory.clear()
+        } else if (event.newGameMode == GameMode.SURVIVAL || event.newGameMode == GameMode.ADVENTURE) {
+            inventoryManager[uniqueId]?.let {
+                player.inventory.contents = it
+                inventoryManager.remove(uniqueId)
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onDamage(event: EntityDamageByEntityEvent) {
         val damage = event.damager as? Player ?: return
