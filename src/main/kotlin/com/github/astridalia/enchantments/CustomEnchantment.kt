@@ -42,7 +42,7 @@ object CustomEnchantment : KoinComponent {
     }
 
     fun ItemStack.applyEnchantment(customEnchantments: CustomEnchantments, level: Int = 1) {
-        if (customEnchantments.applicableMaterials.contains(type)) {
+        if (customEnchantments.target.includes(this.type)) {
             updateMeta {
                 val namespacedKey = customEnchantments.name.lowercase().toNamespacedKey()
                 val currentLevel =
