@@ -1,16 +1,13 @@
 package com.github.astridalia.enchantments
 
 import com.github.astridalia.utils.Rarity
-import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-
 
 
 object CustomEnchantment : KoinComponent {
@@ -32,8 +29,6 @@ object CustomEnchantment : KoinComponent {
         }
     }
 
-
-
     fun ItemStack.removeEnchantment(customEnchantments: CustomEnchantments) {
         updateMeta {
             persistentDataContainer.remove(customEnchantments.name.lowercase().toNamespacedKey())
@@ -42,14 +37,13 @@ object CustomEnchantment : KoinComponent {
     }
 
     fun ItemStack.applyEnchantment(customEnchantments: CustomEnchantments, level: Int = 1) {
-        if (customEnchantments.target.includes(this.type)) {
-            updateMeta {
-                val namespacedKey = customEnchantments.name.lowercase().toNamespacedKey()
-                val currentLevel =
-                    persistentDataContainer.getOrDefault(namespacedKey, PersistentDataType.INTEGER, 0) + level
-                persistentDataContainer.set(namespacedKey, PersistentDataType.INTEGER, currentLevel)
-                updateItemLore(customEnchantments, this, currentLevel)
-            }
+        if (!customEnchantments.target.includes(this.type)) return
+        updateMeta {
+            val namespacedKey = customEnchantments.name.lowercase().toNamespacedKey()
+            val currentLevel =
+                persistentDataContainer.getOrDefault(namespacedKey, PersistentDataType.INTEGER, 0) + level
+            persistentDataContainer.set(namespacedKey, PersistentDataType.INTEGER, currentLevel)
+            updateItemLore(customEnchantments, this, currentLevel)
         }
     }
 
