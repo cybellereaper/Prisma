@@ -15,7 +15,6 @@ import org.bukkit.util.Vector
 
 object EnderInstinctListener : Listener {
 
-
     @EventHandler
     fun onEntityDamage(event: EntityDamageEvent) {
         val player = event.entity as? Player ?: return
@@ -51,10 +50,9 @@ object EnderInstinctListener : Listener {
             originalLocation.add(Vector(2.0, 0.0, 0.0)),
             originalLocation.add(Vector(-2.0, 0.0, 0.0))
         )
-        val safeLocation = potentialLocations.find { isSafeLocation(it) }
-            ?: originalLocation // Fallback to original if no safe location
+        val safeLocation = potentialLocations.find { isSafeLocation(it) } ?: originalLocation
         player.teleport(safeLocation)
-        player.world.spawnParticle(Particle.EXPLOSION_NORMAL, safeLocation, 10) // Visual effect
-        player.world.playSound(safeLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F) // Sound effect
+        player.world.spawnParticle(Particle.EXPLOSION_NORMAL, safeLocation, 10)
+        player.world.playSound(safeLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F)
     }
 }

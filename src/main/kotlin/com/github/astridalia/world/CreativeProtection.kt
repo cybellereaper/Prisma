@@ -1,4 +1,4 @@
-package com.github.astridalia
+package com.github.astridalia.world
 
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent
 import org.bukkit.GameMode

@@ -4,6 +4,17 @@ enum class CharacterClasses(
     val defaultStatistics: Profile,
     val description: String = "",
 ) {
+    WIZARD(
+        defaultStatistics = Profile(
+            strength = 6,  // Good physical attacker
+            defense = 4,   // Below average defense
+            intellect = 7, // Above average intellect for using dark magic
+            will = 5,      // Average willpower
+            agility = 8    // High agility for quick movements
+        ),
+        description = "Ancient beings excelling in dark magic and agility. They drain life to heal, but struggle against holy attacks."
+    ),
+
     VAMPIRE(
         defaultStatistics = Profile(
             strength = 6,  // Good physical attacker

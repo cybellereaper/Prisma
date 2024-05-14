@@ -39,7 +39,7 @@ object GridPickaxeListener : KoinComponent, Listener {
         if (cubicMiningLevel <= 0) return
 
         // Check if the player has the Auto Smelting enchantment
-        val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
+        val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.REFINERY)
         if (autoSmeltLevel > 0) AutoSmeltingListener.onBlockBreak(event)
 
         val cubeBlocks = getCubicBlocks(block, cubicMiningLevel, itemInMainHand)
@@ -76,7 +76,7 @@ object GridPickaxeListener : KoinComponent, Listener {
             val itemInMainHand = player.inventory.itemInMainHand
 
             // Apply AutoSmelting if the player has the enchantment
-            val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
+            val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.REFINERY)
             if (autoSmeltLevel > 0) AutoSmeltingListener.onBlockBreak(event)
 
             // If the event was not cancelled by AutoSmelting, break the block naturally

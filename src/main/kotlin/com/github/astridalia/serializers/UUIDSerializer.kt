@@ -1,4 +1,4 @@
-package com.github.astridalia.character
+package com.github.astridalia.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind

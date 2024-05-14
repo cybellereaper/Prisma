@@ -1,6 +1,6 @@
 package com.github.astridalia.enchantments
 
-import com.github.astridalia.utils.Rarity
+import com.github.astridalia.utils.ItemRarity
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -10,7 +10,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-object CustomEnchantment : KoinComponent {
+object CustomEnchantment  : KoinComponent {
     private val plugin: JavaPlugin by inject()
     fun String.toNamespacedKey() = NamespacedKey(plugin, this)
 
@@ -48,47 +48,42 @@ object CustomEnchantment : KoinComponent {
     }
 
     private fun updateItemLore(customEnchantments: CustomEnchantments, itemMeta: ItemMeta, level: Int) {
-        val enchantmentLore = "${customEnchantments.displayNameWithColor} ${level.toRoman()}"
+        val enchantmentLore = "${customEnchantments.displayNameWithColor} ${level.toColoredRoman()}"
         itemMeta.lore = itemMeta.lore.orEmpty().toMutableList().apply {
             val index = indexOfFirst { it.startsWith(customEnchantments.displayNameWithColor) }
             if (index != -1) this[index] = enchantmentLore else add(enchantmentLore)
         }
     }
 
-    private fun Int.toRoman(): String {
-        val rarityColor = when (this) {
-            in 1..3 -> Rarity.COMMON.color.toString()
-            in 4..6 -> Rarity.UNIQUE.color.toString()
-            in 7..9 -> Rarity.RARE.color.toString()
-            in 10..15 -> Rarity.EPIC.color.toString()  // Adjusted for numbers up to 15
-            in 16..20 -> Rarity.LEGENDARY.color.toString()  // New category for 16-20
-            else -> throw IllegalArgumentException("Unsupported level: $this")
+    private fun Int.getRarityColor(): String {
+        return when (this) {
+            in 1..3 -> ItemRarity.COMMON.color.toString()
+            in 4..6 -> ItemRarity.UNIQUE.color.toString()
+            in 7..9 -> ItemRarity.RARE.color.toString()
+            in 10..15 -> ItemRarity.EPIC.color.toString()
+            in 16..20 -> ItemRarity.LEGENDARY.color.toString()
+            else -> ItemRarity.COMMON.color.toString()  // Default case for unsupported levels
         }
+    }
 
-        val numeral = when (this) {
-            1 -> "I"
-            2 -> "II"
-            3 -> "III"
-            4 -> "IV"
-            5 -> "V"
-            6 -> "VI"
-            7 -> "VII"
-            8 -> "VIII"
-            9 -> "IX"
-            10 -> "X"
-            11 -> "XI"
-            12 -> "XII"
-            13 -> "XIII"
-            14 -> "XIV"
-            15 -> "XV"
-            16 -> "XVI"
-            17 -> "XVII"
-            18 -> "XVIII"
-            19 -> "XIX"
-            20 -> "XX"
-            else -> "" // This will never be reached due to the earlier check
+    private fun Int.toColoredRoman(): String = this.getRarityColor() + this.toRoman()
+
+    private fun Int.toRoman(): String {
+        if (this <= 0) return ""
+        val romanNumerals = listOf(
+            1000 to "M", 900 to "CM", 500 to "D", 400 to "CD",
+            100 to "C", 90 to "XC", 50 to "L", 40 to "XL",
+            10 to "X", 9 to "IX", 5 to "V", 4 to "IV", 1 to "I"
+        )
+        var num = this
+        val roman = StringBuilder()
+        for ((value, numeral) in romanNumerals) {
+            while (num >= value) {
+                roman.append(numeral)
+                num -= value
+            }
         }
-        return rarityColor + numeral
+        return roman.toString()
     }
 
     fun ItemStack.getEnchantmentLevel(customEnchantments: CustomEnchantments): Int =

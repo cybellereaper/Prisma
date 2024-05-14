@@ -1,110 +1,109 @@
 package com.github.astridalia.enchantments
 
 import com.github.astridalia.enchantments.CustomEnchantment.applyEnchantment
-import com.github.astridalia.utils.Rarity
-import org.bukkit.Material
+import com.github.astridalia.utils.ItemRarity
 import org.bukkit.enchantments.EnchantmentTarget
 import org.bukkit.inventory.ItemStack
 import kotlin.random.Random
 
 enum class CustomEnchantments(
-    val rarity: Rarity = Rarity.COMMON,
+    val rarity: ItemRarity = ItemRarity.COMMON,
     val displayName: String,
     val maxLevel: Int = 5,
     val target: EnchantmentTarget = EnchantmentTarget.ALL
 ) {
     FROSTBITE(
+        rarity = ItemRarity.EPIC,
         displayName = "Frostbite",
-        rarity = Rarity.EPIC,
         target = EnchantmentTarget.WEAPON
     ),
     VENOMOUS(
+        rarity = ItemRarity.LEGENDARY,
         displayName = "Venomous",
-        rarity = Rarity.LEGENDARY,
         target = EnchantmentTarget.WEAPON
     ),
     GATHERING(
+        rarity = ItemRarity.RARE,
         displayName = "Gathering",
-        rarity = Rarity.RARE,
         target = EnchantmentTarget.TOOL
     ),
     PRECISION(
+        rarity = ItemRarity.RARE,
         displayName = "Precision",
-        rarity = Rarity.RARE,
         target = EnchantmentTarget.WEAPON
     ),
     REAPER(
+        rarity = ItemRarity.EPIC,
         displayName = "Reaper's Scythe",
-        rarity = Rarity.EPIC,
         target = EnchantmentTarget.WEAPON
     ),
-    SOULBOUND(
-        rarity = Rarity.RARE,
+    SOUL_BOUND(
+        rarity = ItemRarity.RARE,
         displayName = "Soul bound",
         target = EnchantmentTarget.VANISHABLE
     ),
     LIGHTNING_STRIKE(
-        rarity = Rarity.RARE,
+        rarity = ItemRarity.RARE,
         displayName = "ShockWave",
     ),
     JETPACK(
-        rarity = Rarity.RARE,
+        rarity = ItemRarity.RARE,
         displayName = "Jetpack",
         target = EnchantmentTarget.WEARABLE
     ),
     LAVA_WALKER(
-        rarity = Rarity.RARE,
+        rarity = ItemRarity.RARE,
         displayName = "Lava Walker",
         target = EnchantmentTarget.ARMOR_FEET
     ),
     CLOAKING(
-        rarity = Rarity.COMMON,
+        rarity = ItemRarity.COMMON,
         displayName = "Cloaking",
         target = EnchantmentTarget.WEAPON
     ),
     PANDORA_BOX(
-        rarity = Rarity.EPIC,
+        rarity = ItemRarity.EPIC,
         displayName = "Pandora's Box",
         target = EnchantmentTarget.WEAPON
     ),
     ENDER_INSTINCT_DODGE(
-        rarity = Rarity.LEGENDARY,
+        rarity = ItemRarity.LEGENDARY,
         displayName = "Ender Instinct",
         target = EnchantmentTarget.ARMOR_FEET
     ),
     EXPLOSIVE_ARROW(
+        rarity = ItemRarity.RARE,
         displayName = "ShatterShot",
-        rarity = Rarity.RARE,
         target = EnchantmentTarget.BOW
     ),
     MAGNET(
+        rarity = ItemRarity.RARE,
         displayName = "Magnet",
-        rarity = Rarity.RARE,
         target = EnchantmentTarget.TOOL
     ),
     TELEPORT(
+        rarity = ItemRarity.RARE,
         displayName = "Teleport",
-        rarity = Rarity.RARE,
         target = EnchantmentTarget.ALL
     ),
     TREE_CHOPPER(
+        rarity = ItemRarity.COMMON,
         displayName = "Timber",
-        rarity = Rarity.COMMON,
         target = EnchantmentTarget.TOOL
     ),
-    AUTO_SMELT(
-        rarity = Rarity.EPIC,
+    REFINERY(
+        rarity = ItemRarity.EPIC,
         displayName = "Refinery",
         target = EnchantmentTarget.TOOL
     ),
     VAMPIRE(
+        rarity = ItemRarity.EPIC,
         displayName = "Soul Leech",
-        rarity = Rarity.EPIC,
         target = EnchantmentTarget.WEAPON
     ),
     GRID_BREAKER(
-        displayName = "GigaBreaker",
-        rarity = Rarity.EPIC,
+        rarity = ItemRarity.EPIC,
+        displayName = "Giga Breaker",
         target = EnchantmentTarget.TOOL
     );
 

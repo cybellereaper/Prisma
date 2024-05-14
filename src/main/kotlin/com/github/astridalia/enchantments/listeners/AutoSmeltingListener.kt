@@ -36,7 +36,7 @@ object AutoSmeltingListener : Listener {
     fun onBlockBreak(event: BlockBreakEvent) {
         val player = event.player
         val itemInMainHand = player.inventory.itemInMainHand
-        val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.AUTO_SMELT)
+        val autoSmeltLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.REFINERY)
         if (autoSmeltLevel <= 0) return
 
 

@@ -88,13 +88,13 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
     fun onDeath(event: PlayerDeathEvent) {
         val player = event.entity as? Player ?: return
         val soulboundItems = player.inventory.contents.filterNotNull().filter {
-            it.getEnchantmentLevel(CustomEnchantments.SOULBOUND) > 0
+            it.getEnchantmentLevel(CustomEnchantments.SOUL_BOUND) > 0
         }
         event.drops.removeIf { drop -> soulboundItems.any { it.isSimilar(drop) } }
         soulboundItems.forEach { item ->
-            val currentLevel = item.getEnchantmentLevel(CustomEnchantments.SOULBOUND)
+            val currentLevel = item.getEnchantmentLevel(CustomEnchantments.SOUL_BOUND)
             if (currentLevel > 1)
-                item.setEnchantmentLevel(CustomEnchantments.SOULBOUND, currentLevel - 1) else item.removeEnchantment(CustomEnchantments.SOULBOUND)
+                item.setEnchantmentLevel(CustomEnchantments.SOUL_BOUND, currentLevel - 1) else item.removeEnchantment(CustomEnchantments.SOUL_BOUND)
         }
         keepItems[player] = soulboundItems
     }
