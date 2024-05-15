@@ -2,7 +2,6 @@ package com.github.astridalia.utils
 
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
-import org.bukkit.inventory.ItemStack
 
 enum class ItemRarity(
     val color: TextColor,

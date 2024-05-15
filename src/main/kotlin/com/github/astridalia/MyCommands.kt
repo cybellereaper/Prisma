@@ -10,6 +10,7 @@ import com.github.astridalia.enchantments.CustomEnchantment.applyEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.removeEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.setEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
+import com.github.astridalia.world.mobs.MobManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.koin.core.component.KoinComponent
@@ -103,6 +104,13 @@ object MyCommands : BaseCommand(), KoinComponent {
         target.sendMessage("You have been ride by ${player.name}")
         player.sendMessage("You have ride ${target.name}")
         target.addPassenger(player)
+    }
+
+    @CommandAlias("mobs")
+    @CommandPermission("prisma.mobs")
+    fun mobs(player: Player, mob: String, name: String) {
+        MobManager.spawnCustomMob(player.location, mob, name)
+        player.sendMessage("Spawned mob $name")
     }
 
     @CommandAlias("enchantments")

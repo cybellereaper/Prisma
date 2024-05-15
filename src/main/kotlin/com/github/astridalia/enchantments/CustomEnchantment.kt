@@ -1,6 +1,9 @@
 package com.github.astridalia.enchantments
 
 import com.github.astridalia.utils.ItemRarity
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -10,7 +13,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-object CustomEnchantment  : KoinComponent {
+object CustomEnchantment : KoinComponent {
     private val plugin: JavaPlugin by inject()
     fun String.toNamespacedKey() = NamespacedKey(plugin, this)
 
@@ -47,6 +50,7 @@ object CustomEnchantment  : KoinComponent {
         }
     }
 
+
     private fun updateItemLore(customEnchantments: CustomEnchantments, itemMeta: ItemMeta, level: Int) {
         val enchantmentLore = "${customEnchantments.displayNameWithColor} ${level.toColoredRoman()}"
         itemMeta.lore = itemMeta.lore.orEmpty().toMutableList().apply {
@@ -55,18 +59,25 @@ object CustomEnchantment  : KoinComponent {
         }
     }
 
-    private fun Int.getRarityColor(): String {
+
+    private fun Int.getRarityColor(): TextColor {
         return when (this) {
-            in 1..3 -> ItemRarity.COMMON.color.toString()
-            in 4..6 -> ItemRarity.UNIQUE.color.toString()
-            in 7..9 -> ItemRarity.RARE.color.toString()
-            in 10..15 -> ItemRarity.EPIC.color.toString()
-            in 16..20 -> ItemRarity.LEGENDARY.color.toString()
-            else -> ItemRarity.COMMON.color.toString()  // Default case for unsupported levels
+            in 1..3 -> ItemRarity.COMMON.color
+            in 4..6 -> ItemRarity.UNIQUE.color
+            in 7..9 -> ItemRarity.RARE.color
+            in 10..15 -> ItemRarity.EPIC.color
+            in 16..20 -> ItemRarity.LEGENDARY.color
+            else -> ItemRarity.COMMON.color
         }
     }
 
-    private fun Int.toColoredRoman(): String = this.getRarityColor() + this.toRoman()
+    fun String.convertToLegacy(textColor: TextColor): String {
+        val component = Component.text(this).color(textColor)
+        val legacyComponentSerializer = LegacyComponentSerializer.legacy('&').serialize(component)
+        return legacyComponentSerializer.replace("&", "§")
+    }
+
+    private fun Int.toColoredRoman(): String = this.toRoman().convertToLegacy(this.getRarityColor())
 
     private fun Int.toRoman(): String {
         if (this <= 0) return ""
@@ -92,4 +103,5 @@ object CustomEnchantment  : KoinComponent {
             PersistentDataType.INTEGER,
             0
         ) ?: 0
+
 }

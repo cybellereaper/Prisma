@@ -2,6 +2,7 @@ package com.github.astridalia.enchantments.listeners
 
 import com.github.astridalia.enchantments.CustomEnchantment.getEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
+import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.World
@@ -24,7 +25,7 @@ object ExplosiveArrowListener : Listener, KoinComponent {
             arrowShooters[arrow]?.let { shooter ->
                 shooter.inventory.itemInMainHand.getEnchantmentLevel(CustomEnchantments.EXPLOSIVE_ARROW)
                     .takeIf { it > 0 }
-                    ?.also {
+                    ?.also { it ->
                         explodeArrow(arrow, EXPLOSION_POWER * it)
                         arrowShooters.remove(arrow)
                     }

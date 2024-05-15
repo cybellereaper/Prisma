@@ -1,7 +1,13 @@
 package com.github.astridalia.enchantments
 
 import com.github.astridalia.enchantments.CustomEnchantment.applyEnchantment
+import com.github.astridalia.enchantments.CustomEnchantment.convertToLegacy
 import com.github.astridalia.utils.ItemRarity
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.enchantments.EnchantmentTarget
 import org.bukkit.inventory.ItemStack
 import kotlin.random.Random
@@ -81,6 +87,16 @@ enum class CustomEnchantments(
         displayName = "Magnet",
         target = EnchantmentTarget.TOOL
     ),
+    BACKDRAFT(
+        rarity = ItemRarity.RARE,
+        displayName = "Backdraft",
+        target = EnchantmentTarget.WEAPON
+    ),
+    NULLIFY(
+        rarity = ItemRarity.LEGENDARY,
+        displayName = "Nullify",
+        target = EnchantmentTarget.ARMOR_TORSO
+    ),
     TELEPORT(
         rarity = ItemRarity.RARE,
         displayName = "Teleport",
@@ -107,7 +123,7 @@ enum class CustomEnchantments(
         target = EnchantmentTarget.TOOL
     );
 
-    val displayNameWithColor: String = rarity.color.toString() + displayName
+    val displayNameWithColor: String = displayName.convertToLegacy(rarity.color)
 
     companion object {
         fun getRandomEnchantment(itemStack: ItemStack) {

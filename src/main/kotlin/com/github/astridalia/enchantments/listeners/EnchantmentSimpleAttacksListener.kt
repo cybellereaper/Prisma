@@ -20,7 +20,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
@@ -30,6 +29,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.sin
 import kotlin.random.Random
 
@@ -41,18 +41,23 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
     fun onReaperDamage(event: EntityDamageByEntityEvent) {
         val damage = event.damager as? Player ?: return
         val itemInMainHand = damage.inventory.itemInMainHand
+
+        if (event.entity is LivingEntity) {
+            val `chest plate` = (event.entity as Player).inventory.chestplate ?: return
+            val enchantmentLevel = `chest plate`.getEnchantmentLevel(CustomEnchantments.NULLIFY)
+            if (enchantmentLevel > 0 && chanceGenerator(enchantmentLevel)) {
+                return
+            }
+        }
+
         val reaperLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.REAPER)
         if (reaperLevel <= 0) return
         val entity = event.entity as? LivingEntity ?: return
-        val baseChance = 0.000_0001
-        val levelEffect = 0.02 * reaperLevel
-        val finalChance = baseChance + levelEffect
-        if (Math.random() < finalChance) {
-            reaperEffect(entity)
-            event.damage = entity.health + 1.0
-            applyDurability(itemInMainHand, reaperLevel, damage)
-            damage.damage(12.5)
-        }
+        if (!chanceGenerator(reaperLevel)) return
+        reaperEffect(entity)
+        event.damage = entity.health + 1.0
+        applyDurability(itemInMainHand, reaperLevel, damage)
+        damage.damage(12.5)
     }
 
     private fun reaperEffect(entity: LivingEntity) {
@@ -94,7 +99,9 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         soulboundItems.forEach { item ->
             val currentLevel = item.getEnchantmentLevel(CustomEnchantments.SOUL_BOUND)
             if (currentLevel > 1)
-                item.setEnchantmentLevel(CustomEnchantments.SOUL_BOUND, currentLevel - 1) else item.removeEnchantment(CustomEnchantments.SOUL_BOUND)
+                item.setEnchantmentLevel(CustomEnchantments.SOUL_BOUND, currentLevel - 1) else item.removeEnchantment(
+                CustomEnchantments.SOUL_BOUND
+            )
         }
         keepItems[player] = soulboundItems
     }
@@ -157,15 +164,6 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         return now - lastSneakTime < 500
     }
 
-    @EventHandler
-    fun onToggleSneak(event: PlayerToggleSneakEvent) {
-        if (event.isSneaking && isDoubleSneak(event.player)) {
-            // Dismount all passengers when double sneaking
-            if(event.player.passengers.isEmpty()) return
-            event.player.passengers.forEach { it.eject() }
-            event.player.sendMessage("All passengers have been ejected.")
-        }
-    }
 
     @EventHandler
     fun onTreeChopper(event: BlockBreakEvent) {
@@ -216,6 +214,7 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         val itemInMainHand = damage.inventory.itemInMainHand
         val precisionLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.PRECISION)
         if (precisionLevel <= 0) return
+        if (!chanceGenerator(precisionLevel)) return
         event.damage *= 2
         damage.world.playSound(damage.location, Sound.ENTITY_GENERIC_HURT, 1.0f, 1.0f)
     }
@@ -229,10 +228,10 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
 
         event.damage *= 2
         val target = event.entity as? LivingEntity ?: return
+        if (!chanceGenerator(venomLevel)) return
         target.world.playSound(target.location, Sound.ENTITY_GENERIC_HURT, 1.0f, 1.0f)
         target.addPotionEffect(PotionEffect(PotionEffectType.POISON, 20 * 3, venomLevel - 1))
     }
-
 
     @EventHandler
     fun onPlayerDamageWithFrostbite(event: EntityDamageByEntityEvent) {
@@ -241,10 +240,7 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         val frostbiteLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.FROSTBITE)
         if (frostbiteLevel <= 0) return
 
-        val baseChance = 0.75
-        val levelEffect = (frostbiteLevel - 1) * 0.05
-        val chance = baseChance + levelEffect
-        if (Random.nextDouble() < chance) {
+        if (chanceGenerator(frostbiteLevel)) {
             event.damage *= 2
             val target = event.entity as? LivingEntity ?: return
             target.freezeTicks = 20 * 5
@@ -254,8 +250,6 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
             target.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * 5, frostbiteLevel - 1))
         }
     }
-
-
 
     @EventHandler
     fun onPlayerTeleport(event: PlayerInteractEvent) {
@@ -301,6 +295,74 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
     }
 
     @EventHandler
+    fun onPlayerNullify(event: EntityDamageByEntityEvent) {
+        val damager = event.damager as? Player ?: return
+        val itemInMainHand = damager.inventory.chestplate ?: return
+        val nullifyLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.NULLIFY)
+        if (nullifyLevel <= 0) return
+        if (!chanceGenerator(nullifyLevel)) return
+
+        val negativeEffects = setOf(
+            PotionEffectType.POISON,
+            PotionEffectType.SLOW,
+            PotionEffectType.WEAKNESS,
+            PotionEffectType.BLINDNESS,
+            PotionEffectType.HUNGER,
+            PotionEffectType.WITHER
+        )
+
+        var effectsRemoved = false
+        for (effect in negativeEffects) {
+            if (damager.hasPotionEffect(effect)) {
+                damager.removePotionEffect(effect)
+                effectsRemoved = true
+            }
+        }
+
+        // Play sound and particle effects if any negative effects were removed
+        if (effectsRemoved) {
+            damager.location.world?.spawnParticle(Particle.SPELL_MOB, damager.location, 30, 1.0, 1.0, 1.0, 0.5)
+            damager.location.world?.playSound(damager.location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f)
+        }
+    }
+
+    private fun chanceGenerator(level: Int): Boolean = Random.nextDouble() < 0.2 + 0.05 * level
+
+    @EventHandler
+    fun onPlayerBackdraft(event: EntityDamageByEntityEvent) {
+        val damager = event.damager as? Player ?: return
+        val itemInMainHand = damager.inventory.itemInMainHand
+        val backdraftLevel = itemInMainHand.getEnchantmentLevel(CustomEnchantments.BACKDRAFT)
+        if (backdraftLevel <= 0) return
+        val target = event.entity as? LivingEntity ?: return
+        val negativeEffects = setOf(
+            PotionEffectType.POISON,
+            PotionEffectType.SLOW,
+            PotionEffectType.WEAKNESS,
+            PotionEffectType.BLINDNESS,
+            PotionEffectType.HUNGER,
+            PotionEffectType.WITHER
+        )
+        var effectsTransferred = false
+        damager.activePotionEffects.forEach { effect ->
+            if (effect.type in negativeEffects && chanceGenerator(backdraftLevel)) {
+                target.addPotionEffect(
+                    PotionEffect(effect.type, max(effect.duration*backdraftLevel, 128), effect.amplifier * backdraftLevel),
+                    true
+                )
+
+                damager.removePotionEffect(effect.type)
+                effectsTransferred = true
+            }
+        }
+        if (effectsTransferred) {
+            target.location.world?.spawnParticle(Particle.SPELL_WITCH, target.location, 30, 0.5, 0.5, 0.5, 0.5)
+            target.location.world?.playSound(target.location, Sound.ENTITY_WITCH_THROW, 1.0f, 1.0f)
+            damager.location.world?.playSound(damager.location, Sound.ENTITY_WITCH_DRINK, 1.0f, 1.0f)
+        }
+    }
+
+    @EventHandler
     fun onPlayerInteractEvent(event: PlayerInteractEvent) {
         val itemOnCursor = event.player.itemInHand
         val cloakingLevel = itemOnCursor.getEnchantmentLevel(CustomEnchantments.CLOAKING)
@@ -310,6 +372,5 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
             val potionEffect = PotionEffect(PotionEffectType.INVISIBILITY, 255 * cloakingLevel, 1)
             event.player.addPotionEffect(potionEffect)
         }
-
     }
 }
