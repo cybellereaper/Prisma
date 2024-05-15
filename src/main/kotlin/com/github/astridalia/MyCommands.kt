@@ -6,11 +6,15 @@ import co.aikar.commands.annotation.CommandPermission
 import co.aikar.commands.annotation.Flags
 import com.github.astridalia.character.CharacterClasses
 import com.github.astridalia.character.CharacterProfile.applyStatistic
+import com.github.astridalia.character.currency.CharacterCurrency.getBalance
 import com.github.astridalia.enchantments.CustomEnchantment.applyEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.removeEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.setEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import com.github.astridalia.world.mobs.MobManager
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.koin.core.component.KoinComponent
@@ -90,7 +94,7 @@ object MyCommands : BaseCommand(), KoinComponent {
     @CommandAlias("class")
     @CommandPermission("prisma.class")
     fun chooseClass(characterClasses: CharacterClasses, @Flags("other") target: Player) {
-        target.applyStatistic(characterClasses, 0)
+        target.applyStatistic(characterClasses)
         target.sendMessage("Applied statistics for ${characterClasses.name.lowercase()}")
     }
 
@@ -111,6 +115,18 @@ object MyCommands : BaseCommand(), KoinComponent {
     fun mobs(player: Player, mob: String, name: String) {
         MobManager.spawnCustomMob(player.location, mob, name)
         player.sendMessage("Spawned mob $name")
+    }
+
+    @CommandAlias("balance")
+    fun balance(player: Player) {
+        player.sendMessage("You have ${player.getBalance()} coins")
+    }
+
+    @CommandAlias("showitem")
+    fun showOffhandItem(player: Player, @Flags("other") target: Player) {
+        val item = player.inventory.itemInHand
+        val color = TextColor.color(255, 0, 255)
+        target.sendMessage(Component.text("${player.name}'s Item").color(color).hoverEvent(item.asHoverEvent()))
     }
 
     @CommandAlias("enchantments")

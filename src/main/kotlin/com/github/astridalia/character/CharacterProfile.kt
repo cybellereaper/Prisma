@@ -8,17 +8,14 @@ import kotlin.math.max
 
 // TODO: Unstable
 object CharacterProfile {
-
     private fun Player.resetToDefaults() {
         val baseHealth = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.defaultValue ?: 20.0
         val baseAttack = this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.defaultValue ?: 1.0
-
-        playerTime
         this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = baseHealth
         this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue = baseAttack
     }
 
-    fun Player.applyStatistic(characterClasses: CharacterClasses, value: Int) {
+    fun Player.applyStatistic(characterClasses: CharacterClasses) {
         val baseHealth = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.defaultValue ?: 20.0
         val baseAttack = this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.defaultValue ?: 1.0
         resetToDefaults()

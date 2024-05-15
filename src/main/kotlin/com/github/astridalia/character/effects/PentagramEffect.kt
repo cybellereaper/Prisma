@@ -4,6 +4,7 @@ import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.World
 import org.bukkit.entity.Player
+import org.bukkit.event.Listener
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.math.PI
 import kotlin.math.cos
@@ -15,7 +16,7 @@ class PentagramEffect(private val player: Player) : BukkitRunnable() {
 
     override fun run() {
         if (!player.isOnline || !player.isValid) {
-            this.cancel() // Stop the effect if the player is offline or invalid
+            this.cancel()
             return
         }
 

@@ -42,10 +42,10 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         val damage = event.damager as? Player ?: return
         val itemInMainHand = damage.inventory.itemInMainHand
 
-        if (event.entity is LivingEntity) {
-            val `chest plate` = (event.entity as Player).inventory.chestplate ?: return
-            val enchantmentLevel = `chest plate`.getEnchantmentLevel(CustomEnchantments.NULLIFY)
-            if (enchantmentLevel > 0 && chanceGenerator(enchantmentLevel)) {
+        if (event.entity is Player) {
+            val itemStack = (event.entity as Player).inventory.chestplate
+            val nullLevel = itemStack?.getEnchantmentLevel(CustomEnchantments.NULLIFY) ?: 0
+            if (nullLevel > 0 && chanceGenerator(nullLevel)) {
                 return
             }
         }
@@ -347,7 +347,11 @@ object EnchantmentSimpleAttacksListener : Listener, KoinComponent {
         damager.activePotionEffects.forEach { effect ->
             if (effect.type in negativeEffects && chanceGenerator(backdraftLevel)) {
                 target.addPotionEffect(
-                    PotionEffect(effect.type, max(effect.duration*backdraftLevel, 128), effect.amplifier * backdraftLevel),
+                    PotionEffect(
+                        effect.type,
+                        max(effect.duration * backdraftLevel, 128),
+                        effect.amplifier * backdraftLevel
+                    ),
                     true
                 )
 

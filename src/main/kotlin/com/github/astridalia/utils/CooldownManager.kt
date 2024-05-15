@@ -5,7 +5,7 @@ import java.util.*
 object CooldownManager {
     enum class CooldownCause {
         ENCHANTMENT,
-        SPELL,
+        SPELL
     }
 
     private val cooldowns: MutableMap<Pair<UUID, CooldownCause>, Long> = mutableMapOf()

@@ -67,11 +67,6 @@ enum class CustomEnchantments(
         displayName = "Cloaking",
         target = EnchantmentTarget.WEAPON
     ),
-    PANDORA_BOX(
-        rarity = ItemRarity.EPIC,
-        displayName = "Pandora's Box",
-        target = EnchantmentTarget.WEAPON
-    ),
     ENDER_INSTINCT_DODGE(
         rarity = ItemRarity.LEGENDARY,
         displayName = "Ender Instinct",

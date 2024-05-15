@@ -1,6 +1,7 @@
 package com.github.astridalia
 
 import co.aikar.commands.PaperCommandManager
+import com.github.astridalia.character.currency.CharacterCurrency
 import com.github.astridalia.enchantments.listeners.*
 import com.github.astridalia.world.CreativeProtection
 import org.bukkit.event.Listener
@@ -21,6 +22,7 @@ class Prisma : JavaPlugin(), KoinComponent {
     private val explosiveArrows by inject<ExplosiveArrowListener>()
     private val enchantmentSimpleAttacksListener by inject<EnchantmentSimpleAttacksListener>()
     private val myCommands by inject<MyCommands>()
+
 
 
     private val lavaWalkerListener by inject<LavaWalkerListener>()
@@ -57,7 +59,7 @@ class Prisma : JavaPlugin(), KoinComponent {
             VampireHitListener,
             lavaWalkerListener,
             EnderInstinctListener,
-            PandoraListener,
+            CharacterCurrency
 //            SpellManager
         )
     }
