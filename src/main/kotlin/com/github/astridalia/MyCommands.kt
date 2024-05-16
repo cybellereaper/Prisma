@@ -6,21 +6,24 @@ import co.aikar.commands.annotation.CommandPermission
 import co.aikar.commands.annotation.Flags
 import com.github.astridalia.character.CharacterClasses
 import com.github.astridalia.character.CharacterProfile.applyStatistic
-import com.github.astridalia.character.currency.CharacterCurrency.getBalance
+import com.github.astridalia.character.money.CurrencyManager
+import com.github.astridalia.character.money.PersistentCurrencyManager
 import com.github.astridalia.enchantments.CustomEnchantment.applyEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.removeEnchantment
 import com.github.astridalia.enchantments.CustomEnchantment.setEnchantmentLevel
 import com.github.astridalia.enchantments.CustomEnchantments
 import com.github.astridalia.world.mobs.MobManager
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.koin.core.component.KoinComponent
 
 @CommandAlias("prisma|pa")
-object MyCommands : BaseCommand(), KoinComponent {
+class MyCommands : BaseCommand(), KoinComponent {
+
+    private val currencyManager: CurrencyManager = PersistentCurrencyManager("coins")
+
     enum class CommandOptions {
         REMOVE, ADD, SET
     }
@@ -119,7 +122,8 @@ object MyCommands : BaseCommand(), KoinComponent {
 
     @CommandAlias("balance")
     fun balance(player: Player) {
-        player.sendMessage("You have ${player.getBalance()} coins")
+        val balance = currencyManager.getBalance(player)
+        player.sendMessage("You have $balance coins")
     }
 
     @CommandAlias("showitem")
