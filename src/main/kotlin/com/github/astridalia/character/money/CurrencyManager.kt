@@ -10,9 +10,7 @@ interface CurrencyManager {
     fun subtractBalance(player: Player, amount: Double): Boolean
 
     fun pay(player: Player, amount: Double): Boolean {
-        if (subtractBalance(player, amount)) {
-            return true
-        }
+        if (subtractBalance(player, amount)) return true
         player.sendMessage("§cYou do not have enough coins to pay §6$amount §acoins.")
         return false
     }

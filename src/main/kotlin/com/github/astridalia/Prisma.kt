@@ -44,8 +44,6 @@ class Prisma : JavaPlugin(), KoinComponent {
         startKoin {
             modules(appModule)
         }
-        
-//        SpellManager.testSpells()
 
         paperCommandManager.registerCommand(myCommands)
         registerEventListeners(

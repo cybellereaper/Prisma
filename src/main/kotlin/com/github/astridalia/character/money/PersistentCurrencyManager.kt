@@ -8,9 +8,8 @@ data class PersistentCurrencyManager(override val name: String) : CurrencyManage
     override fun getBalance(player: Player): Double =
         player.persistentDataContainer.get(name.toNamespacedKey(), PersistentDataType.DOUBLE) ?: 0.0
 
-    override fun setBalance(player: Player, amount: Double) {
+    override fun setBalance(player: Player, amount: Double) =
         player.persistentDataContainer.set(name.toNamespacedKey(), PersistentDataType.DOUBLE, amount)
-    }
 
     override fun addBalance(player: Player, amount: Double) {
         val newBalance = getBalance(player) + amount
